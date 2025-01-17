@@ -24,13 +24,13 @@ cd SIGINTPI
 To run the Python scripts directly (without typing `python3`), make them executable. In your project’s root directory (or wherever your `wizard/` folder is located), run:
 
 ```bash
-chmod +x wizard/*.py
+sudo chmod +x wizard/*.py
 ```
 
 This command applies executable permissions to all `.py` files in the `wizard/` directory. If you have subfolders with `.py` files, you can recursively apply permissions:
 
 ```bash
-find wizard/ -type f -name "*.py" -exec chmod +x {} \;
+sudo find wizard/ -type f -name "*.py" -exec chmod +x {} \;
 ```
 
 **Note:** You can skip this step if you prefer to run each script with `python3 wizard/scriptname.py`.
@@ -38,12 +38,12 @@ find wizard/ -type f -name "*.py" -exec chmod +x {} \;
 Additionally, ensure that the required permissions are set on all scripts during deployment. Run the following command to ensure all scripts in the `wizard/` directory are ready to execute:
 
 ```bash
-chmod -R +x wizard
+sudo chmod -R +x wizard
 ```
 
 ## 3. Run the Scripts
 
-You can execute each script in the `wizard` folder in sequence (or as needed):
+You can execute each script in the `wizard` folder in sequence:
 
 ### `raspberrypi_readiness.py`
 
@@ -69,20 +69,20 @@ If you made the scripts executable:
 
 ```bash
 cd wizard
-./raspberrypi_readiness.py
-./remote-access-enable.py
-./raspberrypi-components-readiness.py
-./raspberrypi-software-readiness.py
+sudo ./raspberrypi_readiness.py
+sudo ./remote-access-enable.py
+sudo ./raspberrypi-components-readiness.py
+sudo ./raspberrypi-software-readiness.py
 ```
 
 If you want to use Python directly:
 
 ```bash
 cd wizard
-python3 raspberrypi_readiness.py
-python3 remote-access-enable.py
-python3 raspberrypi-components-readiness.py
-python3 raspberrypi-software-readiness.py
+sudo python3 raspberrypi_readiness.py
+sudo python3 remote-access-enable.py
+sudo python3 raspberrypi-components-readiness.py
+sudo python3 raspberrypi-software-readiness.py
 ```
 
 ## 4. Follow On-Screen Prompts
@@ -99,7 +99,7 @@ Read the console output carefully and follow each instruction.
 
 ### Permission Denied
 
-If you get a `Permission denied` error, ensure you have run `chmod +x` on the script or invoke it with `python3 wizard/<script>.py`.
+If you get a `Permission denied` error, ensure you have run `chmod +x` on the script or invoke it with `sudo python3 wizard/<script>.py`.
 
 ### Missing Dependencies
 

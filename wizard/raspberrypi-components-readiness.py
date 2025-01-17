@@ -3,14 +3,14 @@ import sys
 import time
 import os
 
-# Common Vendor:Product IDs for RTL-SDR & HackRF
+# Common Vendor:Product IDs for RTL-SDR & HackRF.
 # Adjust if your specific dongles use different IDs.
 DEVICE_IDS = {
     "NESDR (RTL-SDR)": ["0bda:2838", "0bda:2832"],  # Realtek chipsets
     "HackRF": ["1d50:6089"],                        # HackRF
 }
 
-# Paths to udev rules we’ll create if missing
+# Paths to udev rules we'll create if missing
 RTLSDR_RULES_PATH = "/etc/udev/rules.d/20-rtl-sdr.rules"
 HACKRF_RULES_PATH = "/etc/udev/rules.d/52-hackrf.rules"
 
@@ -48,7 +48,8 @@ def run_command(command, description=None, exit_on_failure=False):
 def is_device_plugged(device_id_list):
     """
     Check via lsusb if at least one Vendor:Product ID in device_id_list is currently connected.
-    :param device_id_list: List of strings, each in the format 'vvvv:pppp' (hex).
+
+    :param device_id_list: List of strings, each in 'vvvv:pppp' format (hex).
     :return: True if any matching device is found, False otherwise.
     """
     try:
@@ -62,7 +63,7 @@ def is_device_plugged(device_id_list):
 
 def wait_for_device(device_name, device_id_list):
     """
-    Continuously check for device presence via lsusb every 5 seconds.
+    Continuously checks for device presence via lsusb every 5 seconds.
     The script waits until the device is detected, or user presses Ctrl+C.
     
     :param device_name: Descriptive name of the device (string).
@@ -80,8 +81,8 @@ def wait_for_device(device_name, device_id_list):
 
 def setup_udev_rules_and_permissions():
     """
-    Ensure that udev rules for both RTL-SDR and HackRF exist, then reload them
-    and add the current user to the 'plugdev' group for USB device access.
+    Ensures that udev rules for both RTL-SDR and HackRF exist, then reloads them
+    and adds the current user to the 'plugdev' group for USB device access.
     """
     print("\n[INFO] Setting up udev rules & permissions for RTL-SDR and HackRF.")
 
@@ -115,7 +116,6 @@ def setup_udev_rules_and_permissions():
     )
 
     # 4) Add user to plugdev group
-    #    We'll detect the current user from the environment
     current_user = os.getenv("USER") or "pi"
     run_command(
         f"sudo usermod -aG plugdev {current_user}",
@@ -138,7 +138,7 @@ def main():
     )
 
     ########################################################################
-    # 2. Install RTL-SDR Tools (for the NESDR Smart)
+    # 2. Install RTL-SDR Tools (for the NESDR)
     ########################################################################
     run_command(
         "sudo apt install -y rtl-sdr",
@@ -167,16 +167,16 @@ def main():
     ########################################################################
     wait_for_device("NESDR (RTL-SDR)", DEVICE_IDS["NESDR (RTL-SDR)"])
 
-    # Quick test to see if device is recognized
+    # Quick test (rtl_test) to confirm the device is recognized
     run_command(
         "rtl_test -t",
         "Verifying that NESDR is detected (rtl_test -t)"
     )
 
-    # Optional: More thorough test capturing a small sample
+    # Capture a small sample (-n 5e6 = 5 million samples) so it exits on its own
     run_command(
-        "rtl_sdr -f 109000000 -s 2048000 -g 50 test_nesdr.bin",
-        "Capturing a sample from NESDR (test_nesdr.bin)"
+        "rtl_sdr -f 109000000 -s 2048000 -g 50 -n 5000000 test_nesdr.bin",
+        "Capturing a finite sample from NESDR (test_nesdr.bin)"
     )
 
     ########################################################################
@@ -190,10 +190,10 @@ def main():
         "Verifying HackRF device (hackrf_info)"
     )
 
-    # Optional: More thorough test capturing a small sample
+    # Capture a small sample (-n 5e6 = 5 million samples) to exit automatically
     run_command(
-        "hackrf_transfer -r test_hackrf.bin -f 109000000 -s 20000000",
-        "Capturing a sample from HackRF (test_hackrf.bin)"
+        "hackrf_transfer -r test_hackrf.bin -f 109000000 -s 20000000 -n 5000000",
+        "Capturing a finite sample from HackRF (test_hackrf.bin)"
     )
 
     ########################################################################
@@ -215,7 +215,7 @@ def main():
     ########################################################################
     # 8. Reboot recommended
     ########################################################################
-    print("\n[INFO] Stage 2 complete. A reboot (or log out/in) is recommended so that group membership changes take effect.")
+    print("\n[INFO] Stage 2 complete. A reboot (or log out/in) is recommended so group membership changes take effect.")
     reboot_choice = input("Would you like to reboot now? [y/N]: ").strip().lower()
     if reboot_choice == "y":
         print("[INFO] Rebooting the system...")

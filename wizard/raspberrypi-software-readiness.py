@@ -2,13 +2,17 @@ import subprocess
 import sys
 import time
 
-def run_command(command, description=None, exit_on_failure=False):
+def run_command(command, description=None, exit_on_failure=False, has_retried=False):
     """
     Run a shell command and optionally exit if the command fails.
-    
+
+    Automatically attempts to fix broken dpkg states if we see exit code 1
+    (common with "Sub-process /usr/bin/dpkg returned an error code (1)").
+
     :param command: Command to be executed (string).
     :param description: Description shown before running the command (string).
     :param exit_on_failure: If True, the script will exit immediately on command failure.
+    :param has_retried: Internal flag to prevent infinite recursion. If True, we won't retry again.
     """
     desc = description or command
     print(f"\n[+] {desc}")
@@ -27,19 +31,43 @@ def run_command(command, description=None, exit_on_failure=False):
             print("    " + "\n    ".join(stdout.splitlines()))
         print(f"    [SUCCESS] {desc}")
     except subprocess.CalledProcessError as e:
+        # Capture any stderr output
         stderr = e.stderr.strip()
         error_msg = stderr if stderr else str(e)
         print(f"    [ERROR] {desc}\n      Reason: {error_msg}")
+
+        # Check if dpkg error code (1) occurred, indicating a broken state
+        if "dpkg returned an error code (1)" in error_msg.lower() and not has_retried:
+            print("[WARN] Detected dpkg error code (1). Attempting to fix with 'apt-get --fix-broken install' & 'dpkg --configure -a'.")
+            attempt_fix_broken_install()
+
+            # Retry the command once
+            print(f"[INFO] Retrying: {desc}")
+            run_command(command, description=desc, exit_on_failure=exit_on_failure, has_retried=True)
+            return
         if exit_on_failure:
             sys.exit(1)
+
+def attempt_fix_broken_install():
+    """
+    Attempts to fix a broken dpkg/apt state by running:
+      1) sudo apt-get --fix-broken install -y
+      2) sudo dpkg --configure -a
+    Logs output but does not exit on failure; 
+    the main run_command logic decides if we bail out after a retry.
+    """
+    fix_cmds = [
+        "sudo apt-get --fix-broken install -y",
+        "sudo dpkg --configure -a"
+    ]
+    for fc in fix_cmds:
+        print(f"[INFO] Running fix command: {fc}")
+        subprocess.run(fc, shell=True, check=False, text=True)
 
 def prompt_desktop_test(app_name, cli_command=None):
     """
     Prompt the user to verify an application from the desktop or CLI.
     Optionally display a CLI command the user can run.
-    
-    :param app_name: Name of the application or test (string).
-    :param cli_command: Optional CLI command to display for the user.
     """
     print(f"\n[TEST] Please launch '{app_name}' from the Raspberry Pi desktop environment.")
     if cli_command:
@@ -49,9 +77,6 @@ def prompt_desktop_test(app_name, cli_command=None):
 def prompt_confirmation(message):
     """
     Prompt the user for a Y/N confirmation. Return True if user typed 'y', else False.
-    
-    :param message: The prompt to display.
-    :return: Boolean indicating whether user confirmed (y) or not.
     """
     response = input(f"\n{message} [y/N]: ").strip().lower()
     return (response == 'y')
@@ -64,7 +89,7 @@ def main():
     # 1. Install GNU Radio
     ########################################################################
     run_command(
-        "sudo apt update -y && sudo apt install -y gnuradio",
+        "sudo apt-get update -y && sudo apt-get install -y gnuradio",
         "Installing GNU Radio",
         exit_on_failure=True
     )
@@ -76,7 +101,7 @@ def main():
     ########################################################################
     print("\n[INFO] Installing gr-osmosdr (may show xtrx-dkms errors; usually harmless).")
     run_command(
-        "sudo apt install -y gr-osmosdr",
+        "sudo apt-get install -y gr-osmosdr",
         "Installing gr-osmosdr"
     )
 
@@ -85,7 +110,7 @@ def main():
     ########################################################################
     print("\n[INFO] Installing gqrx-sdr (may show xtrx-dkms errors; usually harmless).")
     run_command(
-        "sudo apt install -y gqrx-sdr",
+        "sudo apt-get install -y gqrx-sdr",
         "Installing gqrx-sdr"
     )
     # Prompt user to test GQRX on the Desktop
@@ -95,15 +120,15 @@ def main():
     # 4. Update & Upgrade, then Cleanup
     ########################################################################
     run_command(
-        "sudo apt update -y && sudo apt upgrade -y",
+        "sudo apt-get update -y && sudo apt-get upgrade -y",
         "Updating & upgrading the system"
     )
     run_command(
-        "sudo apt autoremove -y && sudo apt autoclean -y",
+        "sudo apt-get autoremove -y && sudo apt-get autoclean -y",
         "Cleaning up unnecessary packages"
     )
     run_command(
-        "sudo apt update -y && sudo apt upgrade -y",
+        "sudo apt-get update -y && sudo apt-get upgrade -y",
         "Re-running updates to ensure repositories are synced"
     )
 
@@ -111,7 +136,7 @@ def main():
     # 5. Install GR-GSM
     ########################################################################
     run_command(
-        "sudo apt install -y gr-gsm",
+        "sudo apt-get install -y gr-gsm",
         "Installing GR-GSM"
     )
     # Prompt user to test grgsm_livemon from Desktop
@@ -125,7 +150,7 @@ def main():
     
     # Install build dependencies
     run_command(
-        "sudo apt install -y git cmake build-essential libtool autoconf automake rtl-sdr pkg-config libfftw3-dev",
+        "sudo apt-get install -y git cmake build-essential libtool autoconf automake rtl-sdr pkg-config libfftw3-dev",
         "Installing dependencies for Kalibrate-RTL",
         exit_on_failure=True
     )
@@ -142,7 +167,7 @@ def main():
 
     # Install librtlsdr-dev
     run_command(
-        "sudo apt install -y librtlsdr-dev",
+        "sudo apt-get install -y librtlsdr-dev",
         "Installing librtlsdr-dev"
     )
 
@@ -183,7 +208,6 @@ def main():
     # 7. Create new udev rule for HackRF
     ########################################################################
     print("\n[INFO] Creating udev rule for HackRF at /etc/udev/rules.d/52-hackrf.rules.")
-    # We'll echo the rule instead of opening nano manually:
     hackrf_rule = 'SUBSYSTEM=="usb", ATTR{idVendor}=="1d50", ATTR{idProduct}=="6089", MODE="0666", GROUP="plugdev"'
     rule_command = f'echo \'{hackrf_rule}\' | sudo tee /etc/udev/rules.d/52-hackrf.rules'
     run_command(rule_command, "Creating /etc/udev/rules.d/52-hackrf.rules")
@@ -197,11 +221,8 @@ def main():
     ########################################################################
     # 8. Add user to plugdev group
     ########################################################################
-    username_command = "echo $USER"
-    user_proc = subprocess.run(username_command, shell=True, stdout=subprocess.PIPE, text=True)
-    current_user = user_proc.stdout.strip()
-    if not current_user:
-        current_user = "pi"  # fallback, if somehow $USER wasn't set
+    user_proc = subprocess.run("echo $USER", shell=True, stdout=subprocess.PIPE, text=True)
+    current_user = user_proc.stdout.strip() or "pi"
 
     print(f"\n[INFO] Adding user '{current_user}' to 'plugdev' group for HackRF USB access.")
     run_command(

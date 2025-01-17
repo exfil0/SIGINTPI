@@ -6,8 +6,9 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
     """
     Run a shell command and optionally exit if the command fails.
 
-    Automatically attempts to fix broken dpkg states if we see exit code 1
-    (common with "Sub-process /usr/bin/dpkg returned an error code (1)").
+    Automatically attempts to fix a broken dpkg/apt state if we see:
+      - "dpkg returned an error code (1)"
+    Also checks if xtrx-dkms is causing the error and removes it if detected.
 
     :param command: Command to be executed (string).
     :param description: Description shown before running the command (string).
@@ -31,30 +32,43 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
             print("    " + "\n    ".join(stdout.splitlines()))
         print(f"    [SUCCESS] {desc}")
     except subprocess.CalledProcessError as e:
-        # Capture any stderr output
+        # Extract stderr
         stderr = e.stderr.strip()
         error_msg = stderr if stderr else str(e)
         print(f"    [ERROR] {desc}\n      Reason: {error_msg}")
 
-        # Check if dpkg error code (1) occurred, indicating a broken state
+        # If dpkg error code (1) and we haven't retried yet, try to fix
         if "dpkg returned an error code (1)" in error_msg.lower() and not has_retried:
-            print("[WARN] Detected dpkg error code (1). Attempting to fix with 'apt-get --fix-broken install' & 'dpkg --configure -a'.")
+            # 1) If xtrx-dkms is mentioned, remove it automatically
+            if "xtrx-dkms" in error_msg.lower():
+                print("[WARN] xtrx-dkms is causing dpkg failures. Removing xtrx-dkms (purge).")
+                remove_xtrx_dkms()
+
+            # 2) Attempt standard fix-broken approach
+            print("[WARN] Attempting to fix broken dpkg state with apt-get --fix-broken install & dpkg --configure -a")
             attempt_fix_broken_install()
 
-            # Retry the command once
+            # 3) Retry the original command
             print(f"[INFO] Retrying: {desc}")
             run_command(command, description=desc, exit_on_failure=exit_on_failure, has_retried=True)
             return
+
         if exit_on_failure:
             sys.exit(1)
+
+def remove_xtrx_dkms():
+    """
+    Uninstall / purge xtrx-dkms if it's blocking dpkg from succeeding.
+    """
+    print("[INFO] Removing xtrx-dkms package via apt-get purge...")
+    # We won't raise an error if removal fails; we just attempt it.
+    subprocess.run("sudo apt-get remove --purge -y xtrx-dkms", shell=True, check=False)
 
 def attempt_fix_broken_install():
     """
     Attempts to fix a broken dpkg/apt state by running:
       1) sudo apt-get --fix-broken install -y
       2) sudo dpkg --configure -a
-    Logs output but does not exit on failure; 
-    the main run_command logic decides if we bail out after a retry.
     """
     fix_cmds = [
         "sudo apt-get --fix-broken install -y",

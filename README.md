@@ -10,7 +10,16 @@ The **wizard** folder contains Python scripts that help automate:
 2. **Component readiness** (installing drivers for SDR devices like RTL-SDR, HackRF, etc.)  
 3. **Software readiness** (installing GNU Radio, GQRX, GR-GSM, Kalibrate-RTL, etc.)
 
-## 1. Make the Scripts Executable
+## 1. Clone the Repository
+
+To get started, clone the SIGINTPI repository from GitHub:
+
+```bash
+git clone https://github.com/exfil0/SIGINTPI.git
+cd SIGINTPI
+```
+
+## 2. Make the Scripts Executable
 
 To run the Python scripts directly (without typing `python3`), make them executable. In your project’s root directory (or wherever your `wizard/` folder is located), run:
 
@@ -26,7 +35,13 @@ find wizard/ -type f -name "*.py" -exec chmod +x {} \;
 
 **Note:** You can skip this step if you prefer to run each script with `python3 wizard/scriptname.py`.
 
-## 2. Run the Scripts
+Additionally, ensure that the required permissions are set on all scripts during deployment. Run the following command to ensure all scripts in the `wizard/` directory are ready to execute:
+
+```bash
+chmod -R +x wizard
+```
+
+## 3. Run the Scripts
 
 You can execute each script in the `wizard` folder in sequence (or as needed):
 
@@ -70,7 +85,7 @@ python3 raspberrypi-components-readiness.py
 python3 raspberrypi-software-readiness.py
 ```
 
-## 3. Follow On-Screen Prompts
+## 4. Follow On-Screen Prompts
 
 During the setup, you might be prompted to:
 

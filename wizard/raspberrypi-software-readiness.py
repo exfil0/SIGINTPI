@@ -1,6 +1,6 @@
 import subprocess
 import sys
-import time
+import os
 
 def run_command(command, description=None, exit_on_failure=False, has_retried=False):
     """
@@ -57,14 +57,12 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
         if exit_on_failure:
             sys.exit(1)
 
-
 def remove_xtrx_dkms():
     """
     Force-remove xtrx-dkms if it is blocking dpkg from succeeding.
     """
     print("[INFO] Removing xtrx-dkms package via 'apt-get remove --purge -y xtrx-dkms' ...")
     subprocess.run("sudo apt-get remove --purge -y xtrx-dkms", shell=True, check=False)
-
 
 def attempt_fix_broken_install():
     """
@@ -80,7 +78,6 @@ def attempt_fix_broken_install():
         print(f"[INFO] Running fix command: {cmd}")
         subprocess.run(cmd, shell=True, check=False, text=True)
 
-
 def prompt_desktop_test(app_name, cli_command=None):
     """
     Prompt the user to verify an application from the desktop or CLI.
@@ -91,7 +88,6 @@ def prompt_desktop_test(app_name, cli_command=None):
         print(f"       Or run this command in a desktop terminal: {cli_command}")
     input("       Once you've tested it and closed it, press ENTER to continue...")
 
-
 def prompt_confirmation(message):
     """
     Prompt the user for a Y/N confirmation. Return True if user typed 'y', else False.
@@ -99,6 +95,17 @@ def prompt_confirmation(message):
     response = input(f"\n{message} [y/N]: ").strip().lower()
     return (response == 'y')
 
+def get_actual_user():
+    """
+    Returns the user that invoked sudo, or $USER if not running under sudo.
+    If everything else fails, defaults to 'pi'.
+    """
+    sudo_user = os.getenv("SUDO_USER", "")
+    if sudo_user:
+        return sudo_user.strip()
+    # Otherwise fallback to $USER or 'pi'
+    env_user = os.getenv("USER", "pi").strip()
+    return env_user if env_user else "pi"
 
 def main():
     print("\n========== RASPBERRY PI 5 AND SOFTWARE READINESS (STAGE 2) ==========")
@@ -112,6 +119,7 @@ def main():
         "Installing GNU Radio",
         exit_on_failure=True
     )
+    # Prompt user to verify gnuradio-companion (GRC) from Desktop
     prompt_desktop_test("GNU Radio Companion", "gnuradio-companion")
 
     ########################################################################
@@ -203,10 +211,10 @@ def main():
         "Installing kalibrate-rtl"
     )
 
-    # Verify installation
+    # Instead of 'kal --help', use 'kal -h' to avoid the invalid option error
     run_command(
-        "kal --help",
-        "Testing kalibrate-rtl (kal --help)"
+        "kal -h",
+        "Testing kalibrate-rtl (kal -h)"
     )
 
     # Optional quick test
@@ -234,13 +242,11 @@ def main():
     ########################################################################
     # 8. Add user to plugdev group
     ########################################################################
-    user_proc = subprocess.run("echo $USER", shell=True, stdout=subprocess.PIPE, text=True)
-    current_user = user_proc.stdout.strip() or "pi"
-
-    print(f"\n[INFO] Adding user '{current_user}' to 'plugdev' group for HackRF USB access.")
+    actual_user = get_actual_user()
+    print(f"\n[INFO] Adding user '{actual_user}' to 'plugdev' group for HackRF USB access.")
     run_command(
-        f"sudo usermod -aG plugdev {current_user}",
-        f"Adding '{current_user}' to plugdev group"
+        f"sudo usermod -aG plugdev {actual_user}",
+        f"Adding '{actual_user}' to plugdev group"
     )
     print("\n[WARNING] You must log out and log back in (or reboot) for group changes to take effect.\n")
 

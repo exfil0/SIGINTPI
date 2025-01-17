@@ -6,18 +6,20 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
     """
     Run a shell command and optionally exit if the command fails.
 
-    Automatically attempts to fix a broken dpkg/apt state if we see:
-      - "dpkg returned an error code (1)"
-    Also checks if xtrx-dkms is causing the error and removes it if detected.
+    If we see 'dpkg returned an error code (1)', we:
+      1) Purge xtrx-dkms
+      2) Attempt standard 'fix-broken install' & 'dpkg --configure -a'
+      3) Retry the original command once.
 
-    :param command: Command to be executed (string).
-    :param description: Description shown before running the command (string).
-    :param exit_on_failure: If True, the script will exit immediately on command failure.
+    :param command: The shell command to run (string).
+    :param description: Text describing the command (string).
+    :param exit_on_failure: If True, exit the script if this command fails eventually.
     :param has_retried: Internal flag to prevent infinite recursion. If True, we won't retry again.
     """
     desc = description or command
     print(f"\n[+] {desc}")
     try:
+        # Attempt to run the command
         result = subprocess.run(
             command,
             shell=True,
@@ -31,38 +33,38 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
             print("    Output:")
             print("    " + "\n    ".join(stdout.splitlines()))
         print(f"    [SUCCESS] {desc}")
+
     except subprocess.CalledProcessError as e:
-        # Extract stderr
         stderr = e.stderr.strip()
         error_msg = stderr if stderr else str(e)
         print(f"    [ERROR] {desc}\n      Reason: {error_msg}")
 
-        # If dpkg error code (1) and we haven't retried yet, try to fix
+        # If dpkg error code (1) and we haven't retried yet, attempt to fix
         if "dpkg returned an error code (1)" in error_msg.lower() and not has_retried:
-            # 1) If xtrx-dkms is mentioned, remove it automatically
-            if "xtrx-dkms" in error_msg.lower():
-                print("[WARN] xtrx-dkms is causing dpkg failures. Removing xtrx-dkms (purge).")
-                remove_xtrx_dkms()
+            print("[WARN] 'dpkg returned an error code (1)'. Attempting to purge xtrx-dkms and fix broken packages.")
 
-            # 2) Attempt standard fix-broken approach
-            print("[WARN] Attempting to fix broken dpkg state with apt-get --fix-broken install & dpkg --configure -a")
+            # 1) Remove xtrx-dkms forcibly
+            remove_xtrx_dkms()
+
+            # 2) Attempt standard fix steps
             attempt_fix_broken_install()
 
-            # 3) Retry the original command
-            print(f"[INFO] Retrying: {desc}")
+            # 3) Retry the original command once
+            print(f"[INFO] Retrying command: {desc}")
             run_command(command, description=desc, exit_on_failure=exit_on_failure, has_retried=True)
             return
 
         if exit_on_failure:
             sys.exit(1)
 
+
 def remove_xtrx_dkms():
     """
-    Uninstall / purge xtrx-dkms if it's blocking dpkg from succeeding.
+    Force-remove xtrx-dkms if it is blocking dpkg from succeeding.
     """
-    print("[INFO] Removing xtrx-dkms package via apt-get purge...")
-    # We won't raise an error if removal fails; we just attempt it.
+    print("[INFO] Removing xtrx-dkms package via 'apt-get remove --purge -y xtrx-dkms' ...")
     subprocess.run("sudo apt-get remove --purge -y xtrx-dkms", shell=True, check=False)
+
 
 def attempt_fix_broken_install():
     """
@@ -74,9 +76,10 @@ def attempt_fix_broken_install():
         "sudo apt-get --fix-broken install -y",
         "sudo dpkg --configure -a"
     ]
-    for fc in fix_cmds:
-        print(f"[INFO] Running fix command: {fc}")
-        subprocess.run(fc, shell=True, check=False, text=True)
+    for cmd in fix_cmds:
+        print(f"[INFO] Running fix command: {cmd}")
+        subprocess.run(cmd, shell=True, check=False, text=True)
+
 
 def prompt_desktop_test(app_name, cli_command=None):
     """
@@ -88,12 +91,14 @@ def prompt_desktop_test(app_name, cli_command=None):
         print(f"       Or run this command in a desktop terminal: {cli_command}")
     input("       Once you've tested it and closed it, press ENTER to continue...")
 
+
 def prompt_confirmation(message):
     """
     Prompt the user for a Y/N confirmation. Return True if user typed 'y', else False.
     """
     response = input(f"\n{message} [y/N]: ").strip().lower()
     return (response == 'y')
+
 
 def main():
     print("\n========== RASPBERRY PI 5 AND SOFTWARE READINESS (STAGE 2) ==========")
@@ -107,7 +112,6 @@ def main():
         "Installing GNU Radio",
         exit_on_failure=True
     )
-    # Prompt user to verify gnuradio-companion (GRC) from Desktop
     prompt_desktop_test("GNU Radio Companion", "gnuradio-companion")
 
     ########################################################################
@@ -127,7 +131,6 @@ def main():
         "sudo apt-get install -y gqrx-sdr",
         "Installing gqrx-sdr"
     )
-    # Prompt user to test GQRX on the Desktop
     prompt_desktop_test("GQRX", "gqrx")
 
     ########################################################################
@@ -153,7 +156,6 @@ def main():
         "sudo apt-get install -y gr-gsm",
         "Installing GR-GSM"
     )
-    # Prompt user to test grgsm_livemon from Desktop
     print("\n[INFO] To test GR-GSM, you'll run `grgsm_livemon -f 950400000` from a desktop terminal.")
     prompt_desktop_test("grgsm_livemon", "grgsm_livemon -f 950400000")
 
@@ -161,19 +163,17 @@ def main():
     # 6. Install Kalibrate-RTL
     ########################################################################
     print("\n[INFO] Installing dependencies and building Kalibrate-RTL from source.")
-    
+
     # Install build dependencies
     run_command(
         "sudo apt-get install -y git cmake build-essential libtool autoconf automake rtl-sdr pkg-config libfftw3-dev",
         "Installing dependencies for Kalibrate-RTL",
         exit_on_failure=True
     )
-    # Clone repo
     run_command(
         "git clone https://github.com/steve-m/kalibrate-rtl.git",
         "Cloning Kalibrate-RTL repository"
     )
-    # Enter directory
     run_command(
         "cd kalibrate-rtl",
         "Entering kalibrate-rtl directory"
@@ -185,7 +185,7 @@ def main():
         "Installing librtlsdr-dev"
     )
 
-    # Bootstrap, configure, make, install
+    # Build & install
     run_command(
         "cd kalibrate-rtl && ./bootstrap",
         "Running bootstrap in kalibrate-rtl"
@@ -226,7 +226,6 @@ def main():
     rule_command = f'echo \'{hackrf_rule}\' | sudo tee /etc/udev/rules.d/52-hackrf.rules'
     run_command(rule_command, "Creating /etc/udev/rules.d/52-hackrf.rules")
 
-    # Reload & trigger udev
     run_command(
         "sudo udevadm control --reload-rules && sudo udevadm trigger",
         "Reloading udev rules"
@@ -251,7 +250,7 @@ def main():
     print("[TEST] Once you’ve re-logged in (or after a reboot), you should run `hackrf_info` (no sudo).")
     hackrf_info_check = prompt_confirmation("Have you re-logged and tested hackrf_info yet?")
     if hackrf_info_check:
-        print("[INFO] Assuming hackrf_info works fine for you as non-root.")
+        print("[INFO] Assuming hackrf_info works fine as non-root.")
     else:
         print("[WARN] If hackrf_info did NOT work, you may need to reboot or log out/in again.")
 

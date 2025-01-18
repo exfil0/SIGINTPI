@@ -13,13 +13,12 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
 
     :param command: The shell command to run (string).
     :param description: Text describing the command (string).
-    :param exit_on_failure: If True, exit the script if this command fails eventually.
+    :param exit_on_failure: If True, exit the script if this command ultimately fails.
     :param has_retried: Internal flag to prevent infinite recursion. If True, we won't retry again.
     """
     desc = description or command
     print(f"\n[+] {desc}")
     try:
-        # Attempt to run the command
         result = subprocess.run(
             command,
             shell=True,
@@ -43,13 +42,13 @@ def run_command(command, description=None, exit_on_failure=False, has_retried=Fa
         if "dpkg returned an error code (1)" in error_msg.lower() and not has_retried:
             print("[WARN] 'dpkg returned an error code (1)'. Attempting to purge xtrx-dkms and fix broken packages.")
 
-            # 1) Remove xtrx-dkms forcibly
+            # Remove xtrx-dkms forcibly
             remove_xtrx_dkms()
 
-            # 2) Attempt standard fix steps
+            # Attempt standard fix steps
             attempt_fix_broken_install()
 
-            # 3) Retry the original command once
+            # Retry the original command once
             print(f"[INFO] Retrying command: {desc}")
             run_command(command, description=desc, exit_on_failure=exit_on_failure, has_retried=True)
             return
@@ -103,9 +102,25 @@ def get_actual_user():
     sudo_user = os.getenv("SUDO_USER", "")
     if sudo_user:
         return sudo_user.strip()
-    # Otherwise fallback to $USER or 'pi'
     env_user = os.getenv("USER", "pi").strip()
     return env_user if env_user else "pi"
+
+def run_command_ignore_code(command, description=None, acceptable_codes=None):
+    """
+    Run a command and ignore certain non-zero exit codes. 
+    If an unlisted non-zero code occurs, raise CalledProcessError as usual.
+
+    :param command: The shell command (string).
+    :param description: Description for logging (string).
+    :param acceptable_codes: List of exit codes we can ignore (list of int).
+    """
+    desc = description or command
+    print(f"\n[+] {desc} (ignore certain exit codes: {acceptable_codes})")
+    result = subprocess.run(command, shell=True, text=True)
+    if result.returncode != 0 and (acceptable_codes is None or result.returncode not in acceptable_codes):
+        print(f"    [ERROR] {desc}\n      Return code: {result.returncode}")
+        raise subprocess.CalledProcessError(result.returncode, command)
+    print(f"    [SUCCESS/IGNORED] {desc}")
 
 def main():
     print("\n========== RASPBERRY PI 5 AND SOFTWARE READINESS (STAGE 2) ==========")
@@ -119,7 +134,6 @@ def main():
         "Installing GNU Radio",
         exit_on_failure=True
     )
-    # Prompt user to verify gnuradio-companion (GRC) from Desktop
     prompt_desktop_test("GNU Radio Companion", "gnuradio-companion")
 
     ########################################################################
@@ -211,10 +225,11 @@ def main():
         "Installing kalibrate-rtl"
     )
 
-    # Instead of 'kal --help', use 'kal -h' to avoid the invalid option error
-    run_command(
+    # Some versions of kal fail with -h. We'll allow a 255 exit code.
+    run_command_ignore_code(
         "kal -h",
-        "Testing kalibrate-rtl (kal -h)"
+        "Testing kalibrate-rtl (kal -h)",
+        acceptable_codes=[255]
     )
 
     # Optional quick test
@@ -248,20 +263,21 @@ def main():
         f"sudo usermod -aG plugdev {actual_user}",
         f"Adding '{actual_user}' to plugdev group"
     )
-    print("\n[WARNING] You must log out and log back in (or reboot) for group changes to take effect.\n")
+    print("\n[WARNING] Group change usually requires log out/in or reboot. We'll still try a quick test.\n")
 
     ########################################################################
-    # 9. Prompt user to test hackrf_info without sudo
+    # 9. Auto-test hackrf_info if installed
     ########################################################################
-    print("[TEST] Once you’ve re-logged in (or after a reboot), you should run `hackrf_info` (no sudo).")
-    hackrf_info_check = prompt_confirmation("Have you re-logged and tested hackrf_info yet?")
-    if hackrf_info_check:
-        print("[INFO] Assuming hackrf_info works fine as non-root.")
+    print("[TEST] Attempting 'hackrf_info' as a quick check (non-sudo).")
+    # If the user isn't actually in 'plugdev' yet, we might fail. We'll just warn.
+    hackrf_test = subprocess.run("hackrf_info", shell=True)
+    if hackrf_test.returncode != 0:
+        print("[WARN] 'hackrf_info' returned an error. You may need to log out/in or reboot for group membership to take effect.")
     else:
-        print("[WARN] If hackrf_info did NOT work, you may need to reboot or log out/in again.")
+        print("[INFO] 'hackrf_info' succeeded as non-sudo. Good sign!")
 
     ########################################################################
-    # 10. Run a test scan with HackRF + GR-GSM
+    # 10. Optionally run GR-GSM scan with HackRF
     ########################################################################
     print("\n[INFO] You can run a GSM scan with HackRF using GR-GSM:")
     print("       grgsm_scanner --args=\"hackrf=0\" -b GSM900")
@@ -283,8 +299,7 @@ def main():
         print("[INFO] Rebooting the system...")
         run_command("sudo reboot", "Rebooting")
     else:
-        print("[INFO] Skipping reboot. Remember to log out and back in so group changes take effect.")
-        print("You can manually reboot later if needed.\n")
+        print("[INFO] Skipping reboot. You can manually reboot later if needed.\n")
 
     print("========== STAGE 2 COMPLETE ==========")
     print("GNU Radio, GQRX, GR-GSM, Kalibrate-RTL, and related tools are installed.")

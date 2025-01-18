@@ -1,21 +1,18 @@
-#!/usr/bin/env python3
-
 import subprocess
 import sys
 import os
 
 def run_command(command, description=None, exit_on_failure=False):
     """
-    Run a shell command and optionally exit if the command fails.
-    
-    :param command: The shell command to run (string).
-    :param description: Text describing the command in logs (string).
+    Run a shell command, optionally exiting on failure.
+
+    :param command: Command to run (string).
+    :param description: Log-friendly description (string).
     :param exit_on_failure: If True, script exits if the command fails.
     """
     desc = description or command
     print(f"\n[+] {desc}")
     try:
-        # Run the command, capturing stdout/stderr
         result = subprocess.run(
             command,
             shell=True,
@@ -30,7 +27,6 @@ def run_command(command, description=None, exit_on_failure=False):
             print("    " + "\n    ".join(stdout.splitlines()))
         print(f"    [SUCCESS] {desc}")
     except subprocess.CalledProcessError as e:
-        # On failure, log the error and optionally exit
         stderr = e.stderr.strip()
         error_msg = stderr if stderr else str(e)
         print(f"    [ERROR] {desc}\n      Reason: {error_msg}")
@@ -39,8 +35,8 @@ def run_command(command, description=None, exit_on_failure=False):
 
 def get_actual_user():
     """
-    Returns the user that invoked 'sudo', or $USER if not running via sudo.
-    Defaults to 'pi' if neither is found.
+    Returns the user that invoked sudo, or $USER if not under sudo.
+    Defaults to 'pi' if not found.
     """
     sudo_user = os.getenv("SUDO_USER", "")
     if sudo_user:
@@ -87,7 +83,7 @@ def main():
     )
 
     ########################################################################
-    # 4. Add the Current User to 'plugdev'
+    # 4. Add User to 'plugdev' Group
     ########################################################################
     actual_user = get_actual_user()
     print(f"\n[INFO] Adding user '{actual_user}' to 'plugdev' group for BladeRF USB access.")
@@ -98,33 +94,30 @@ def main():
     print("\n[WARNING] A logout/login or reboot is typically required for group changes to apply.\n")
 
     ########################################################################
-    # 5. Basic BladeRF Probe Check
+    # 5. Basic BladeRF Test: Probing
     ########################################################################
     print("[TEST] Checking bladeRF with 'bladeRF-cli -p' (probing).")
-    probe_result = subprocess.run("bladeRF-cli -p", shell=True)
-    if probe_result.returncode != 0:
-        print("[WARN] 'bladeRF-cli -p' returned an error. You may need to log out/in or reboot first.")
-    else:
+    test_result = subprocess.run("bladeRF-cli -p", shell=True)
+    if test_result.returncode == 0:
         print("[INFO] 'bladeRF-cli -p' ran successfully. BladeRF is recognized.\n")
+    else:
+        print("[WARN] 'bladeRF-cli -p' returned an error. Log out/in or reboot might be needed, or check device.\n")
 
     ########################################################################
-    # 6. Prompt & Perform a Short Capture (Scan)
+    # 6. Capture a Short Sample
     ########################################################################
     print("[INFO] Let's capture a small sample (scan) on a chosen frequency.\n")
     freq_str = input("Enter a frequency in Hz (e.g. 950000000 for 950 MHz): ").strip()
 
     if not freq_str.isdigit():
-        print("[WARN] Invalid frequency input. Skipping capture.")
+        print("[WARN] Invalid frequency input. Skipping sample capture.")
     else:
-        # We'll do a short 2 MHz sample rate, 1.5 MHz bandwidth,
-        # capturing ~4 million samples into a file, which is ~2 seconds at 2 MSPS.
         sample_cmd = (
             "bladeRF-cli -e '"
             f"set frequency rx {freq_str}; "
             "set samplerate rx 2.0M; "
             "set bandwidth rx 1.5M; "
             "set gain rx 30; "
-            # We'll capture 4 million samples to a binary file.
             "rx config file=test_bladerf_scanner.bin format=bin n=4000000; "
             "rx start; rx wait; rx stop;'"
         )
@@ -140,7 +133,7 @@ def main():
     ########################################################################
     reboot_choice = input("Would you like to reboot now? [y/N]: ").strip().lower()
     if reboot_choice == "y":
-        print("[INFO] Rebooting...")
+        print("[INFO] Rebooting the system...")
         run_command("sudo reboot", "Rebooting")
     else:
         print("[INFO] Skipping reboot. Please remember to log out/in or reboot to apply group changes.\n")

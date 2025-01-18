@@ -2,7 +2,6 @@ import subprocess
 import sys
 import os
 
-# Feel free to reuse your existing run_command or define a minimal version below
 def run_command(command, description=None, exit_on_failure=False):
     """
     Run a shell command and optionally exit if the command fails.
@@ -47,7 +46,7 @@ def get_actual_user():
 
 def main():
     print("\n========== RASPBERRY PI & BLADE-RF READINESS ==========")
-    print("This script installs bladeRF packages, sets up permissions, and runs a quick test.\n")
+    print("This script installs bladeRF, sets up permissions, and performs a quick scan.\n")
 
     # 1. Ensure the system is updated
     run_command(
@@ -62,7 +61,8 @@ def main():
         exit_on_failure=True
     )
 
-    # 3. Create a udev rule for bladeRF (Vendor=2cf0, Product=5246)
+    # 3. Create a udev rule for bladeRF (Vendor=2cf0, Product=5246).
+    #    If your device has different IDs, update them.
     print("\n[INFO] Creating udev rule for BladeRF at /etc/udev/rules.d/53-bladerf.rules.")
     bladerf_rule = 'SUBSYSTEM=="usb", ATTR{idVendor}=="2cf0", ATTR{idProduct}=="5246", MODE="0666", GROUP="plugdev"'
     rule_cmd = f'echo \'{bladerf_rule}\' | sudo tee /etc/udev/rules.d/53-bladerf.rules'
@@ -81,29 +81,52 @@ def main():
         f"sudo usermod -aG plugdev {actual_user}",
         f"Adding '{actual_user}' to plugdev group"
     )
-    print("\n[WARNING] A log out/in or reboot is typically required for group changes to apply.\n")
+    print("\n[WARNING] A logout/login or reboot is typically required for group changes to apply.\n")
 
-    # 5. Basic BladeRF Test
-    # We can try “bladeRF-cli -p” to probe the device, or “bladeRF-cli -i” for interactive shell, etc.
-    # For a quick test, we do “bladeRF-cli -p”
-    print("[TEST] Attempting a quick bladeRF test (non-sudo).")
+    # 5. Basic BladeRF Test: 'bladeRF-cli -p' to probe
+    print("[TEST] Checking bladeRF with 'bladeRF-cli -p' (probing).")
     test_result = subprocess.run("bladeRF-cli -p", shell=True)
     if test_result.returncode != 0:
-        print("[WARN] 'bladeRF-cli -p' returned an error. You may need to log out/in or reboot before testing again.")
+        print("[WARN] 'bladeRF-cli -p' returned an error. You may need to log out/in or reboot first.")
     else:
-        print("[INFO] 'bladeRF-cli -p' ran successfully. BladeRF is recognized.")
+        print("[INFO] 'bladeRF-cli -p' ran successfully. BladeRF is recognized.\n")
 
-    # 6. Final steps / optional reboot
-    reboot_choice = input("\nWould you like to reboot now? [y/N]: ").strip().lower()
+    # 6. Optional: Quick frequency scan/capture
+    print("[INFO] Let's capture a small sample (scan) on a chosen frequency.\n")
+    freq_str = input("Enter a frequency in Hz (e.g. 950000000 for 950 MHz): ").strip()
+    if not freq_str.isdigit():
+        print("[WARN] Invalid frequency input. Skipping capture.")
+    else:
+        # We'll do a short 2MHz sample rate, 1.5MHz bandwidth, 2-second capture
+        # that writes ~4 million samples to 'test_bladerf_scanner.bin'.
+        # Adjust these as needed for your environment.
+        sample_cmd = (
+            "bladeRF-cli -e '"
+            f"set frequency rx {freq_str}; "
+            "set samplerate rx 2.0M; "
+            "set bandwidth rx 1.5M; "
+            "set gain rx 30; "
+            "rx config file=test_bladerf_scanner.bin format=bin n=4000000;"
+            "rx start; rx wait; rx stop;'"
+        )
+        run_command(
+            sample_cmd,
+            f"Capturing ~4M samples at {freq_str} Hz into test_bladerf_scanner.bin"
+        )
+        print("[INFO] If no error occurred, 'test_bladerf_scanner.bin' was created.")
+        print("       You can inspect it with SDR tools (GNU Radio, inspectrum, etc.)\n")
+
+    # 7. Final steps / optional reboot
+    reboot_choice = input("Would you like to reboot now? [y/N]: ").strip().lower()
     if reboot_choice == "y":
         print("[INFO] Rebooting...")
         run_command("sudo reboot", "Rebooting")
     else:
         print("[INFO] Skipping reboot. Please remember to log out/in or reboot to apply group changes.\n")
 
-    print("========== BLADE-RF SETUP COMPLETE ==========")
-    print("bladeRF is installed and a quick test has been performed.")
-    print("Use 'bladeRF-cli -p' (non-sudo) after logging back in to confirm everything works.\n")
+    print("========== BLADE-RF SCAN COMPLETE ==========")
+    print("BladeRF is installed, udev rules are set, and a quick sample capture has been performed!")
+    print("Use 'bladeRF-cli -p' or load 'test_bladerf_scanner.bin' in an SDR tool to confirm everything works.\n")
 
 if __name__ == "__main__":
     main()

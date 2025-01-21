@@ -1,4 +1,1258 @@
 Country,Network,MCC,MNC
-South Africa,MTN,655,10
+Abkhazia,Aquafon,289,67
+Abkhazia,A-Mobile,289,88
+Afghanistan,Afghan Wireless (TSI),412,01
+Afghanistan,Roshan (TDCA),412,20
+Afghanistan,MTN,412,40
+Afghanistan,Etisalat,412,50
+Afghanistan,Wasel Telecom,412,55
+Afghanistan,Afghan Telecom,412,88
+Albania,Telekom.al,276,01
+Albania,Vodafone,276,02
+Albania,Eagle Mobile (ALBtelecom),276,03
+Albania,Plus,276,04
+Algeria,Mobilis (Algerie Telecom),603,01
+Algeria,Djezzy,603,02
+Algeria,Ooredoo (Wataniya),603,03
+American Samoa,BlueSky Communications,544,11
+Andorra,SOM (Andorra Telecom),213,03
+Angola,Unitel,631,02
+Angola,Movicel,631,04
+Anguilla,Weblinks,365,01
+Anguilla,FLOW (Cable & Wireless),365,84
+Antigua and Barbuda,Apua,344,03
+Antigua and Barbuda,Digicell,344,50
+Antigua and Barbuda,FLOW (Cable & Wireless),344,92
+Argentina,Movistar (Telefónica),722,01
+Argentina,Nextel (NII),722,02
+Argentina,Movistar (Telefónica),722,07
+Argentina,Claro (AMX Argentina),722,31
+Argentina,Claro (AMX Argentina),722,33
+Argentina,Personal,722,34
+Armenia,Beeline (ArmenTel),283,01
+Armenia,Karabakh Telecom,283,04
+Armenia,VivaCell (MTS),283,05
+Armenia,Ucom LLC,283,10
+Aruba,SETAR,363,01
+Aruba,Digicel,363,02
+Australia,Telstra,505,01
+Australia,Optus (SingTel),505,02
+Australia,Vodafone (Vodafone Hutchison),505,03
+Australia,Lycamobile (MVNO),505,19
+Austria,A1.net (A1 Telekom Austria),232,01
+Austria,T-Mobile (Deutsche Telekom),232,03
+Austria,3 (Hutchison),232,05
+Austria,tele.ring (MVNO),232,07
+Austria,Lycamobile (MVNO),232,08
+Austria,3 (Hutchison),232,10
+Austria,bob (A1 Telekom Austria) (MVNO),232,11
+Austria,yesss! (A1 Telekom Austria) (MVNO),232,12
+Austria,UPC Austria (MVNO),232,13
+Austria,Vectone Mobile (MVNO),232,15
+Austria,MASS Response Service GmbH,232,17
+Austria,Smartspace GmbH (MVNO),232,18
+Austria,Tele2 Telecommunication,232,19
+Azerbaijan,Azercell (Fintur),400,01
+Azerbaijan,Bakcell,400,02
+Azerbaijan,CATEL,400,03
+Azerbaijan,Nar Mobile (Azerfon),400,04
+Azerbaijan,Nakhtel LLC,400,06
+Bahamas,BTC (Cable & Wireless),364,39
+Bahamas,Aliv,364,49
+Bahrain,Batelco,426,01
+Bahrain,Zain,426,02
+Bahrain,VIVA Bahrain,426,04
+Bangladesh,Grameenphone,470,01
+Bangladesh,Robi (Axiata),470,02
+Bangladesh,Banglalink,470,03
+Bangladesh,TeleTalk,470,04
+Bangladesh,Airtel (Bharti Airtel),470,07
+Barbados,FLOW (Cable & Wireless),342,60
+Barbados,Digicel,342,75
+Belarus,Velcom (Telekom Austria),257,01
+Belarus,MTS,257,02
+Belarus,life:),257,04
+Belgium,Proximus (Belgacom),206,01
+Belgium,Telenet (MVNO),206,05
+Belgium,Lycamobile (MVNO),206,06
+Belgium,VOO,206,08
+Belgium,Orange,206,10
+Belgium,BASE (KPN),206,20
+Belgium,Mobile Vikings (MVNO),206,30
+Belize,DigiCell (Belize Telemedia),702,67
+Belize,Smart (Speednet),702,69
+Belize,Smart (Speednet),702,99
+Benin,Libercom (Benin Telecoms),616,01
+Benin,Moov (Telecel Benin),616,02
+Benin,MTN,616,03
+Benin,Bell Benin Communications,616,04
+Benin,Glo Mobile (Globacom),616,05
+Bermuda,CellOne,350,00
+Bermuda,Digicel,350,01
+Bermuda,Mobility,350,02
+Bhutan,B-Mobile (Bhutan Telecom),402,11
+Bhutan,TashiCell,402,77
+Bolivia,Viva,736,01
+Bolivia,Entel,736,02
+Bolivia,Tigo,736,03
+Bosnia and Herzegovina,HT Eronet (HT Mostar),218,03
+Bosnia and Herzegovina,m:tel (Telekom Srpske),218,05
+Bosnia and Herzegovina,BH Telecom,218,90
+Botswana,Mascom,652,01
+Botswana,Orange,652,02
+Botswana,BTC Mobile,652,04
+Brazil,Nextel,724,00
+Brazil,TIM (Telecom Italia),724,02
+Brazil,TIM (Telecom Italia),724,03
+Brazil,TIM (Telecom Italia),724,04
+Brazil,Claro (América Móvil),724,05
+Brazil,Vivo (Telefónica),724,06
+Brazil,Vivo (Telefónica),724,10
+Brazil,Vivo (Telefónica),724,11
+Brazil,Sercomtel,724,15
+Brazil,Oi,724,16
+Brazil,Datora (MVNO),724,18
+Brazil,Vivo (Telefónica),724,19
+Brazil,Vivo (Telefónica),724,23
+Brazil,Oi,724,31
+Brazil,Algar Telecom,724,32
+Brazil,Algar Telecom,724,33
+Brazil,Algar Telecom,724,34
+Brazil,Nextel (NII),724,39
+Brazil,Conecta (MVNO),724,54
+BritishVirgin Islands,FLOW (Cable & Wireless),348,17
+BritishVirgin Islands,Caribbean Cellular Telephone,348,57
+BritishVirgin Islands,Digicel,348,77
+Brunei,B-Mobile Communications,528,02
+Brunei,DSTCom,528,11
+Bulgaria,A1,284,01
+Bulgaria,Vivacom,284,03
+Bulgaria,Telenor,284,05
+Bulgaria,T.com,284,13
+Burkina Faso,Telmob (Onatel),613,01
+Burkina Faso,Orange,613,02
+Burkina Faso,Telecel Faso,613,03
+Burundi,Econet Wireless,642,01
+Burundi,Onatel,642,03
+Burundi,Smart Mobile (Lacell),642,07
+Burundi,Lumitel (Viettel),642,08
+Burundi,econet Leo,642,82
+Cambodia,Cellcard,456,01
+Cambodia,Smart (Axiata),456,02
+Cambodia,Qb (CADCOMMS),456,04
+Cambodia,Smart (Axiata),456,05
+Cambodia,Smart (Axiata),456,06
+Cambodia,MetFone (Viettel),456,08
+Cambodia,MetFone (Viettel),456,09
+Cambodia,Seatel,456,11
+Cambodia,Cootel (Xinwei),456,16
+Cambodia,Cellcard (MobiTel),456,18
+Cameroon,MTN,624,01
+Cameroon,Orange,624,02
+Cameroon,Camtel,624,03
+Cameroon,Nexttel,624,04
+Canada,Telus Mobility,302,22
+Canada,ALO Mobile Inc.,302,25
+Canada,EastLink (Bragg Communications),302,27
+Canada,Airtel Wireless,302,29
+Canada,Mobilicity (DAVE Wireless),302,32
+Canada,Execulink,302,34
+Canada,Telus Mobility,302,36
+Canada,Rogers Wireless,302,37
+Canada,TBayTel,302,38
+Canada,TBayTel,302,39
+Canada,WIND Mobile (Orascom),302,49
+Canada,Videotron (Quebecor Media),302,50
+Canada,Videotron (Quebecor Media),302,51
+Canada,Keewaytinook Mobile,302,53
+Canada,Lynx Mobility (OmniGlobe Networks),302,56
+Canada,Quadro Com,302,59
+Canada,Bell Mobility (BCE),302,61
+Canada,Ice Wireless,302,62
+Canada,Bell Mobility (BCE),302,63
+Canada,Bell Mobility (BCE),302,64
+Canada,TBayTel,302,65
+Canada,MTS Wireless (Manitoba Telecom Services),302,66
+Canada,CityWest,302,67
+Canada,Sasktel,302,68
+Canada,Rogers Communications Canada Inc.,302,72
+Canada,Shaw Telecom,302,74
+Canada,Public Mobile Montreal,302,76
+Canada,RuralCom,302,77
+Canada,Sasktel,302,78
+Canada,Telus Mobility,302,86
+Canada,Telus Mobility,302,88
+Canada,Wightman Telecom,302,94
+Cape Verde,CVMovel (Cabo Verde Telecom),625,01
+Cape Verde,T+ (Teylium),625,02
+Cayman Islands,Digicel,346,05
+Cayman Islands,FLOW (Cable & Wireless),346,14
+Central African Republic,Moov (Etisalat),623,01
+Central African Republic,Telecel (Orascom),623,02
+Central African Republic,Orange,623,03
+Central African Republic,Nationlink Telecom RCA,623,04
+Chad,Airtel (Bharti Airtel),622,01
+Chad,Tigo (Millicom),622,03
+Chile,Entel,730,01
+Chile,Movistar (Telefónica),730,02
+Chile,Claro,730,03
+Chile,WOM,730,04
+Chile,Movistar,730,07
+Chile,VTR Movil (MVNO),730,08
+Chile,WOM,730,09
+Chile,Telestar Movil (MVNO),730,12
+Chile,Virgin Mobile (MVNO),730,13
+China,China Mobile,460,00
+China,China Unicom,460,01
+China,China Telecom,460,03
+China,China Tietong,460,20
+Colombia,Lleida,732,03
+Colombia,Claro,732,10
+Colombia,Tigo (Millicom),732,11
+Colombia,Movistar (Telefónica),732,12
+Colombia,Avantel S.A.,732,13
+Colombia,Virgin Mobile (MVNO),732,15
+Colombia,Empresa de Telecomunicaciones de Bogotá,732,18
+Comoros,Huri (Comores Telecom),654,01
+Comoros,TELCO,654,02
+Congo,Airtel Congo SA,629,01
+Congo,Equateur Telecom SA,629,02
+Congo,Warid Telecom (Abu Dhabi),629,07
+Congo,MTN,629,10
+Congo DR,Vodacom,630,01
+Congo DR,Airtel sprl,630,02
+Congo DR,Supercell,630,05
+Congo DR,Orange RDC sarl,630,86
+Congo DR,Tigo (Salt),630,89
+Congo DR,Africell RDC sprl,630,90
+Cook Islands,Bluesky,548,01
+Costa Rica,Kolbi ICE,712,01
+Costa Rica,Claro (América Móvil),712,03
+Costa Rica,Movistar (Telefónica),712,04
+Cote d Ivoire,Moov (Etisalat),612,02
+Cote d Ivoire,Orange,612,03
+Cote d Ivoire,koZ (Comium),612,04
+Cote d Ivoire,MTN,612,05
+Cote d Ivoire,GreenN (Oricel),612,06
+Cote d Ivoire,café (Aircomm),612,07
+Croatia,T-Mobile (T-Hrvatski Telekom),219,01
+Croatia,Tele2,219,02
+Croatia,A1,219,10
+Cuba,Cubacel (Etecsa),368,01
+Curaçao,Digicel,362,69
+Cyprus,Cytamobile-Vodafone,280,01
+Cyprus,MTN,280,10
+Cyprus,PrimeTel,280,20
+Cyprus,Lemontel (MVNO),280,22
+Czech Republic,T-Mobile (Deutsche Telekom),230,01
+Czech Republic,O2 (Telefónica),230,02
+Czech Republic,Vodafone,230,03
+Czech Republic,Nordic Telecom s.r.o.,230,04
+Czech Republic,O2 (MVNO),230,97
+Denmark,TDC,238,01
+Denmark,Telenor,238,02
+Denmark,3 (Hutchison),238,06
+Denmark,Vectone Mobile (MVNO),238,07
+Denmark,Lycamobile (MVNO),238,12
+Denmark,Telia (TeliaSonera),238,20
+Djibouti,Evatis (Djibouti Telecom),638,01
+Dominica,FLOW (Cable & Wireless),366,11
+Dominica,Digicel,366,20
+Dominican Republic,Altice,370,01
+Dominican Republic,Claro (América Móvil),370,02
+Dominican Republic,Altice,370,03
+Dominican Republic,Viva (Trilogy),370,04
+Ecuador,Movistar (Telefónica),740,00
+Ecuador,Claro,740,01
+Ecuador,CNT Mobile,740,02
+Egypt,Orange,602,01
+Egypt,Vodafone,602,02
+Egypt,Etisalat,602,03
+Egypt,WE (Telecom Egypt),602,04
+El Salvador,Claro (América Móvil),706,01
+El Salvador,Digicel,706,02
+El Salvador,Tigo (Millicom),706,03
+El Salvador,Movistar (Telefónica),706,04
+Equatorial Guinea,Orange (GETESA),627,01
+Equatorial Guinea,HITS Telecom,627,03
+Eritrea,Eritel,657,01
+Estonia,Telia,248,01
+Estonia,Elisa,248,02
+Estonia,Tele2,248,03
+Ethiopia,MTN (Ethio Telecom),636,01
+Falkland Islands,Sure,750,00
+Falkland Islands,Touch,750,01
+Faroe Islands,Faroese Telecom,288,01
+Faroe Islands,Hey,288,02
+Fiji,Vodafone,542,01
+Fiji,Digicel,542,02
+Fiji,Telecom Fiji Ltd,542,03
+Finland,DNA,244,03
+Finland,Elisa,244,05
+Finland,DNA,244,12
+Finland,Alcom,244,14
+Finland,Elisa (MVNO),244,21
+Finland,Sonera (TeliaSonera),244,91
+France,Orange,208,01
+France,Sisteer (MVNO),208,04
+France,SFR (MVNO),208,08
+France,SFR,208,10
+France,Free Mobile,208,15
+France,Legos,208,17
+France,Bouygues Telecom,208,20
+France,Transatel Mobile,208,22
+France,Syndicat mixte ouvert Charente numérique,208,23
+France,Lycamobile (MVNO),208,25
+France,NRJ Mobile (MVNO),208,26
+France,Coriolis Telecom (MVNO),208,27
+France,Syma Mobile (MVNO),208,30
+France,Vectone Mobile (MVNO),208,31
+French Guiana,Digicel,340,20
+French Polynesia,Vodafone (Pacific Mobile Telecom),547,15
+French Polynesia,Vini (Tikiphone),547,20
+FYROM,T-Mobile (Makedonski Telekom),294,01
+FYROM,Vip,294,02
+FYROM,Vip,294,03
+FYROM,Lycamobile (MVNO),294,04
+Gabon,Libertis (Gabon Telecom),628,01
+Gabon,Moov (Etisalat),628,02
+Gabon,Airtel (Bharti Airtel),628,03
+Gabon,Azur,628,04
+Gambia,Gamcel,607,01
+Gambia,Africell,607,02
+Gambia,Comium,607,03
+Gambia,Qcell,607,04
+Georgia,Geocell (Silknet),282,01
+Georgia,Magticom,282,02
+Georgia,Beeline (Mobitel),282,04
+Georgia,S1 Silknet (CDMA),282,05
+Germany,Telekom (Deutsche Telekom),262,01
+Germany,Vodafone,262,02
+Germany,E-Plus,262,03
+Germany,O2 (Telefónica),262,07
+Germany,Dolphin Telecom (MVNO),262,12
+Germany,Telogic ViStream (MVNO),262,16
+Germany,Voiceworks (MVNE),262,20
+Germany,Sipgate Wireless GmbH (MVNO),262,22
+Germany,Lycamobile (MVNO),262,43
+Ghana,MTN,620,01
+Ghana,Vodafone,620,02
+Ghana,AirtelTigo (Milicom),620,03
+Ghana,Expresso (Sudatel),620,04
+Ghana,AirtelTigo (Airtel),620,06
+Ghana,Globacom,620,07
+Gibraltar,GibTel,266,01
+Gibraltar,CTS Mobile,266,06
+Greece,Cosmote,202,01
+Greece,Vodafone,202,05
+Greece,AMD Telecom,202,07
+Greece,WIND,202,09
+Greece,WIND (Largo),202,10
+Greece,Cyta (Hellas),202,14
+Greenland,Tele,290,01
+Grenada,Digicel,352,03
+Grenada,FLOW (Cable & Wireless),352,11
+Grenada,Digicel,352,13
+Guadeloupe,Orange,340,01
+Guadeloupe,UTS Caraïbe,340,03
+Guadeloupe,Amigo (Dauphin Telecom),340,08
+Guam,PTI Pacifica Inc.,310,11
+Guam,Gta Wireless,310,14
+Guam,IT&E Wireless,310,32
+Guam,IT&E (PTI),310,35
+Guam,iConnect,310,40
+Guam,NTT Docomo Pacific,310,47
+Guatemala,Claro,704,01
+Guatemala,Tigo (Millicom),704,02
+Guatemala,Movistar (Telefónica),704,03
+Guernsey,JT,234,50
+Guernsey,Sure Mobile,234,55
+Guinea,Orange,611,01
+Guinea,Sotelgui,611,02
+Guinea,Telecel Guinee,611,03
+Guinea,MTN (Areeba),611,04
+Guinea,Cellcom,611,05
+Guinea-Bissau,MTN,632,02
+Guinea-Bissau,Orange,632,03
+Guinea-Bissau,Guinetel,632,07
+Guyana,Digicel,738,01
+Guyana,GT&T Cellink Plus,738,02
+Haiti,Digicel,372,02
+Haiti,Natcom,372,03
+Honduras,Claro (América Móvil),708,01
+Honduras,Tigo (Millicom),708,02
+Honduras,Hondutel,708,30
+Honduras,Digicel,708,40
+Hong Kong,CSL (Telstra),454,00
+Hong Kong,CITIC Telecom 1616 (MVNO),454,01
+Hong Kong,CSL (Telstra),454,02
+Hong Kong,Hutchison3G,454,03
+Hong Kong,3 (Hutchison),454,04
+Hong Kong,SmarTone,454,06
+Hong Kong,China Unicom (MVNO),454,07
+Hong Kong,Truphone (MVNO),454,08
+Hong Kong,China Motion Telecom (HK) Ltd,454,09
+Hong Kong,China-Hong Kong Telecom (MVNO),454,11
+Hong Kong,China Mobile,454,12
+Hong Kong,3 (Hutchison),454,14
+Hong Kong,SmarTone,454,15
+Hong Kong,PCCW (HKT),454,16
+Hong Kong,SmarTone,454,17
+Hong Kong,PCCW (HKT),454,19
+Hong Kong,PCCW (HKT),454,29
+Hong Kong,CTExcel (MVNO),454,31
+Hungary,Telenor,216,01
+Hungary,T-Mobile (Magyar Telekom),216,30
+Hungary,Vodafone,216,70
+Hungary,UPC Hungary Ltd (MVNO),216,71
+Iceland,Siminn,274,01
+Iceland,Vodafone (Fjarskipta),274,02
+Iceland,Viking,274,04
+Iceland,On-waves,274,08
+Iceland,Nova,274,11
+Iceland,Tal (MVNO),274,12
+India,MTS (Sistema Shyam TeleServices),404,00
+India,Vodafone,404,01
+India,Airtel (Bharti Airtel),404,02
+India,Airtel (Bharti Airtel),404,03
+India,Idea Cellular,404,04
+India,Vodafone,404,05
+India,Idea Cellular,404,07
+India,Reliance Communications,404,09
+India,Airtel (Bharti Airtel),404,10
+India,Vodafone,404,11
+India,Idea Cellular,404,12
+India,Vodafone,404,13
+India,Idea Cellular,404,14
+India,Aircel (Maxis),404,15
+India,Airtel (Bharti Airtel),404,16
+India,Aircel (Maxis),404,17
+India,Reliance Telecom Pvt Ltd,404,18
+India,Idea Cellular,404,19
+India,Vodafone,404,20
+India,Loop Mobile,404,21
+India,Idea Cellular,404,22
+India,Idea Cellular,404,24
+India,Aircel (Maxis),404,25
+India,Vodafone,404,27
+India,Aircel (Maxis),404,28
+India,Aircel (Maxis),404,29
+India,Vodafone,404,30
+India,Airtel (Bharti Airtel),404,31
+India,Aircel (Maxis),404,33
+India,BSNL,404,34
+India,Aircel (Maxis),404,35
+India,Reliance Communications,404,36
+India,Aircel (Maxis),404,37
+India,BSNL,404,38
+India,Airtel (Bharti Airtel),404,40
+India,Aircel (Maxis),404,41
+India,Aircel (Maxis),404,42
+India,Vodafone,404,43
+India,Idea Cellular,404,44
+India,Airtel (Bharti Airtel),404,45
+India,Vodafone,404,46
+India,Airtel (Bharti Airtel),404,49
+India,Reliance Communications,404,50
+India,BSNL,404,51
+India,Reliance Communications,404,52
+India,BSNL,404,53
+India,BSNL,404,54
+India,BSNL,404,55
+India,Idea Cellular,404,56
+India,BSNL,404,57
+India,BSNL,404,58
+India,BSNL,404,59
+India,Aircel (Maxis),404,60
+India,BSNL,404,62
+India,BSNL,404,64
+India,BSNL,404,66
+India,Reliance Communications,404,67
+India,MTNL,404,68
+India,MTNL,404,69
+India,Airtel (Bharti Airtel),404,70
+India,BSNL,404,71
+India,BSNL,404,72
+India,BSNL,404,73
+India,BSNL,404,74
+India,BSNL,404,75
+India,BSNL,404,76
+India,BSNL,404,77
+India,Idea Cellular,404,78
+India,BSNL,404,80
+India,BSNL,404,81
+India,Idea Cellular,404,82
+India,Reliance Communications,404,83
+India,Vodafone,404,84
+India,Reliance Communications,404,85
+India,Vodafone,404,86
+India,IDEA Cellular Ltd,404,87
+India,Vodafone,404,88
+India,IDEA Cellular Ltd,404,89
+India,Airtel (Bharti Airtel),404,90
+India,Aircell Digilink India Ltd,404,91
+India,Airtel (Bharti Airtel),404,92
+India,Airtel (Bharti Airtel),404,93
+India,Airtel (Bharti Airtel),404,94
+India,Airtel (Bharti Airtel),404,95
+India,Airtel (Bharti Airtel),404,96
+India,Airtel (Bharti Airtel),404,97
+India,Airtel (Bharti Airtel),404,98
+India,Reliance Communications,405,01
+India,Tata DOCOMO (Tata Teleservices),405,02
+India,Reliance Communications,405,03
+India,Chennai,405,04
+India,Reliance Communications,405,05
+India,Reliance Communications,405,06
+India,Reliance Communications,405,07
+India,Reliance Communications,405,08
+India,Reliance Communications,405,09
+India,Reliance Communications,405,10
+India,Reliance Communications,405,11
+India,Reliance Communications,405,12
+India,Reliance Communications,405,13
+India,Reliance Communications,405,14
+India,Reliance Communications,405,15
+India,Reliance Communications,405,17
+India,Reliance Communications,405,18
+India,Reliance Communications,405,19
+India,Reliance Communications,405,20
+India,Reliance Communications,405,21
+India,Reliance Communications,405,22
+India,Reliance Communications,405,23
+India,Reliance Jio Infocomm (Reliance Industri,405,24
+India,Tata DOCOMO (Tata Teleservices),405,25
+India,Tata DOCOMO (Tata Teleservices),405,26
+India,Tata DOCOMO (Tata Teleservices),405,27
+India,Tata DOCOMO (Tata Teleservices),405,29
+India,Tata DOCOMO (Tata Teleservices),405,30
+India,Tata DOCOMO (Tata Teleservices),405,31
+India,Tata DOCOMO (Tata Teleservices),405,32
+India,Reliance Communications,405,33
+India,Tata DOCOMO (Tata Teleservices),405,34
+India,Tata DOCOMO (Tata Teleservices),405,35
+India,Tata DOCOMO (Tata Teleservices),405,36
+India,Tata DOCOMO (Tata Teleservices),405,37
+India,Tata DOCOMO (Tata Teleservices),405,38
+India,Tata DOCOMO (Tata Teleservices),405,39
+India,Reliance Communications,405,40
+India,Tata DOCOMO (Tata Teleservices),405,41
+India,Tata DOCOMO (Tata Teleservices),405,42
+India,Tata DOCOMO (Tata Teleservices),405,43
+India,Tata DOCOMO (Tata Teleservices),405,44
+India,Tata DOCOMO (Tata Teleservices),405,45
+India,Tata DOCOMO (Tata Teleservices),405,46
+India,Tata DOCOMO (Tata Teleservices),405,47
+India,Reliance Jio Infocomm Ltd,405,48
+India,Reliance Jio Infocomm Ltd,405,49
+India,Reliance Jio Infocomm Ltd,405,50
+India,Airtel (Bharti Airtel),405,51
+India,Airtel (Bharti Airtel),405,52
+India,Airtel (Bharti Airtel),405,53
+India,Airtel (Bharti Airtel),405,54
+India,Airtel (Bharti Airtel),405,55
+India,Airtel (Bharti Airtel),405,56
+India,Reliance Jio Infocomm Ltd,405,57
+India,Reliance Jio Infocomm Ltd,405,58
+India,Reliance Jio Infocomm Ltd,405,59
+India,Reliance Jio Infocomm Ltd,405,60
+India,Reliance Jio Infocomm Ltd,405,61
+India,Reliance Jio Infocomm Ltd,405,62
+India,Reliance Jio Infocomm Ltd,405,63
+India,Reliance Jio Infocomm Ltd,405,64
+India,Reliance Jio Infocomm Ltd,405,65
+India,Vodafone,405,66
+India,Vodafone,405,67
+India,Reliance Jio Infocomm Ltd,405,68
+India,Reliance Jio Infocomm Ltd,405,69
+India,Idea Cellular,405,70
+India,Reliance Jio Infocomm Ltd,405,71
+India,Reliance Jio Infocomm Ltd,405,72
+India,Reliance Jio Infocomm Ltd,405,73
+India,Reliance Jio Infocomm Ltd,405,74
+India,Vodafone,405,75
+India,Reliance Jio Infocomm Ltd,405,76
+India,Reliance Jio Infocomm Ltd,405,77
+India,Reliance Jio Infocomm Ltd,405,78
+India,Idea Cellular,405,79
+India,Aircel (Maxis),405,80
+India,Airtel (Bharti Airtel),405,81
+India,Airtel (Bharti Airtel),405,82
+India,Videocon,405,83
+India,Airtel (Bharti Airtel),405,84
+India,Airtel (Bharti Airtel),405,85
+India,Aircel (Maxis),405,86
+India,Reliance Jio Infocomm Ltd,405,87
+India,BSNL,405,88
+India,BSNL,405,89
+India,MTS (Sistema Shyam TeleServices),405,90
+India,Idea Cellular,405,91
+India,Airtel (Bharti Airtel),405,92
+India,Etisalat DB Telecom,405,93
+India,Reliance Jio Infocomm Ltd,405,94
+India,Unknown,405,99
+Indonesia,Indosat (Ooredoo),510,01
+Indonesia,Smartfren,510,09
+Indonesia,Telkomsel (Telekomunikasi Selular),510,10
+Indonesia,XL (Axiata),510,11
+Indonesia,Net1,510,27
+Indonesia,PT Mobile-8 Telecom,510,28
+Indonesia,3 (Hutchison),510,89
+Iran,Azartel (MVNO),432,02
+Iran,Shatel (MVNO),432,08
+Iran,MCI (TCI),432,11
+Iran,TKC,432,14
+Iran,MTCE,432,19
+Iran,Rightel,432,20
+Iran,Taliya,432,32
+Iran,MTN Irancell,432,35
+Iraq,Asiacell (Ooredoo),418,05
+Iraq,Zain,418,20
+Iraq,Zain,418,30
+Iraq,Korek Telecom,418,40
+Iraq,Mobitel,418,45
+Iraq,Iraq Central Cooperative Association for,418,47
+Iraq,ITC Fanoos,418,48
+Iraq,IraqTel,418,49
+Iraq,Itisaluna,418,62
+Iraq,Regional Telecom,418,66
+Iraq,Kalimat,418,70
+Iraq,Omnea,418,76
+Ireland,Vodafone,272,01
+Ireland,Hutchison 3G Ireland limited,272,02
+Ireland,Eir,272,03
+Ireland,3 (Hutchison),272,05
+Ireland,Tesco Mobile (MVNO),272,11
+Ireland,Lycamobile (MVNO),272,13
+Isle of Man,Manx Telecom,234,58
+Israel,Partner,425,01
+Israel,Cellcom,425,02
+Israel,Pelephone,425,03
+Israel,Hot Mobile,425,07
+Israel,Golan Telecom Ltd,425,08
+Israel,We4G,425,09
+Israel,Free Telecom (MVNO),425,12
+Israel,Home Cellular (MVNO),425,15
+Israel,Rami Levy (MVNO),425,16
+Israel,Cellact Communications (MVNO),425,18
+Israel,019 Mobile (MVNO),425,19
+Israel,Hot Mobile Ltd.,425,77
+Italy,TIM (Telecom Italia),222,01
+Italy,Noverca (MVNO),222,07
+Italy,Fastweb (MVNO),222,08
+Italy,Vodafone,222,10
+Italy,Poste Mobile (MVNO),222,33
+Italy,BT Italia (MVNO),222,34
+Italy,Lycamobile (MVNO),222,35
+Italy,Digi Italy Srl,222,36
+Italy,Iliad Italia SPA,222,50
+Italy,WIND (VimpelCom),222,88
+Italy,3 (Hutchison),222,99
+Jamaica,Digicel (Jamaica) Limited,338,05
+Jamaica,FLOW (Cable & Wireless),338,18
+Japan,Y!Mobile,440,00
+Japan,SoftBank Mobile,440,04
+Japan,NTT DOCOMO,440,10
+Japan,Softbank Corp,440,20
+Japan,au (KDDI),440,54
+Jersey,Airtel-Vodafone (Bharti),234,03
+Jordan,Zain,416,01
+Jordan,Umniah,416,03
+Jordan,Orange,416,77
+Kazakhstan,Beeline (KaR-Tel LLP),401,01
+Kazakhstan,Kcell JSC,401,02
+Kazakhstan,Altel,401,07
+Kazakhstan,Kazakhtelecom,401,08
+Kazakhstan,Tele2,401,77
+Kenya,Safaricom,639,02
+Kenya,Airtel (Bharti Airtel),639,03
+Kenya,Telkom,639,07
+Kiribati,TSKL,545,09
+Kosovo,Vala (Telecom of Kosovo J.S.C.),221,01
+Kosovo,IPKO,221,02
+Kosovo,Z Mobile (MVNO),221,06
+Kuwait,Zain,419,02
+Kuwait,K.S.C Ooredoo,419,03
+Kuwait,Viva (KTC),419,04
+Kyrgyzstan,Beeline (Sky Mobile LLC),437,01
+Kyrgyzstan,7 Mobile,437,03
+Kyrgyzstan,MegaCom (Alfa Telecom),437,05
+Kyrgyzstan,O! (NurTelecom),437,09
+Laos,LaoTel,457,01
+Laos,ETL,457,02
+Laos,Unitel,457,03
+Laos,Beeline (VimpelCom),457,08
+Latvia,LMT,247,01
+Latvia,Tele2,247,02
+Latvia,Triatel,247,03
+Latvia,Bite,247,05
+Lebanon,Alfa (OTMT),415,01
+Lebanon,Touch (Zain),415,03
+Lesotho,Vodacom,651,01
+Lesotho,Econet Wireless,651,02
+Liberia,Lonestar Communications Corporation,618,01
+Liberia,Novafone,618,04
+Liberia,Orange LBR,618,07
+Libya,Libyana,606,00
+Libya,Madar,606,01
+Liechtenstein,Swisscom,295,01
+Liechtenstein,7acht (Salt Liechtenstein AG),295,02
+Liechtenstein,FL1 (Telecom Liechtenstein AG),295,05
+Lithuania,Telia,246,01
+Lithuania,Bite,246,02
+Lithuania,Tele2,246,03
+Luxembourg,Post,270,01
+Luxembourg,Tango (Belgacom),270,77
+Luxembourg,Orange (Mobistar),270,99
+MACAU,Smartone,455,00
+MACAU,CTM,455,01
+MACAU,China Telecom,455,02
+MACAU,3 (Hutchison),455,03
+Madagascar,Airtel (Bharti Airtel),646,01
+Madagascar,Orange,646,02
+Madagascar,Telma,646,04
+Malawi,TNM,650,01
+Malawi,Airtel (Bharti Airtel),650,10
+Malaysia,TM Homeline,502,11
+Malaysia,Maxis,502,12
+Malaysia,Celcom Axiata Berhad,502,13
+Malaysia,YTL Communications,502,15
+Malaysia,DiGi,502,16
+Malaysia,U Mobile,502,18
+Malaysia,Celcom (Axiata),502,19
+Maldives,Dhiraagu,472,01
+Maldives,Ooredoo,472,02
+Mali,Malitel,610,01
+Mali,Orange,610,02
+Mali,ATEL-SA,610,03
+Malta,Vodafone,278,01
+Malta,Go,278,21
+Malta,Melita Mobile,278,77
+Martinique,Outremer Telecom,340,02
+Mauritania,Mattel,609,01
+Mauritania,Chinguitel (Sudatel),609,02
+Mauritania,Mauritel,609,10
+Mauritius,my.t,617,01
+Mauritius,Mokoze / Azu (MTML),617,02
+Mauritius,Chili (MTML),617,03
+Mauritius,Emtel,617,10
+Mexico,AT&T,334,01
+Mexico,Telcel (América Móvil),334,02
+Mexico,Movistar (Telefónica),334,03
+Mexico,AT&T,334,05
+Mexico,AT&T,334,09
+Micronesia,FSM Telecom,550,01
+Moldova,Orange,259,01
+Moldova,Moldcell (Fintur),259,02
+Moldova,IDC (Interdnestrkom) Transnistria,259,03
+Moldova,Moldtelecom,259,05
+Moldova,Unité,259,99
+Monaco,Monaco Telecom,212,01
+Monaco,Monaco Telecom,212,10
+Mongolia,Skytel,428,01
+Mongolia,G-Mobile,428,06
+Mongolia,Unitel,428,88
+Mongolia,MobiCom,428,99
+Montenegro,Telenor,297,01
+Montenegro,T-Mobile,297,02
+Montenegro,m:tel CG,297,03
+Montserrat,FLOW (Cable & Wireless),354,86
+Morocco,Orange Morocco,604,00
+Morocco,Ittissalat Al-Maghrib (Maroc Telecom),604,01
+Morocco,inwi,604,02
+Mozambique,mCel (Mozambique Cellular),643,01
+Mozambique,Movitel (Viettel),643,03
+Mozambique,Vodacom,643,04
+Myanmar,MPT,414,01
+Myanmar,Ooredoo,414,05
+Myanmar,Telenor Myanmar,414,06
+Myanmar,Mytel,414,09
+Namibia,MTC,649,01
+Namibia,Switch,649,02
+Namibia,TN Mobile,649,03
+Nepal,Nepal Telecom (NDCL),429,01
+Nepal,Ncell Pvt Ltd,429,02
+Nepal,SmartCell,429,04
+Netherlands,Tele2,204,02
+Netherlands,Voiceworks BV,204,03
+Netherlands,Vodafone,204,04
+Netherlands,Vectone Mobile (MVNO),204,06
+Netherlands,Teleena Holding B.V.,204,07
+Netherlands,KPN,204,08
+Netherlands,Lycamobile (MVNO),204,09
+Netherlands,Telfort BV,204,12
+Netherlands,Ziggo,204,15
+Netherlands,T-Mobile (Deutsche Telekom),204,16
+Netherlands,UPC (MVNO),204,18
+Netherlands,T-Mobile (Deutsche Telekom),204,20
+Netherlands,Private Mobility Nederland,204,24
+Netherlands Antilles,Telbo,362,78
+Netherlands Antilles,Chippie,362,91
+New Caledonia,Mobilis,546,01
+NEW GUINEA,Digicel,338,00
+New Zealand,Vodafone,530,01
+New Zealand,Woosh,530,03
+New Zealand,Spark,530,05
+New Zealand,Skinny (MVNO),530,06
+New Zealand,2degrees,530,24
+Nicaragua,Claro (América Móvil),710,21
+Nicaragua,Movistar (Telefónica),710,30
+Nicaragua,CooTel,710,68
+Nicaragua,Claro (América Móvil),710,73
+Niger,SahelCom (Sonitel),614,01
+Niger,Airtel (Bharti Airtel),614,02
+Niger,Moov (Etisalat),614,03
+Niger,Orange,614,04
+Nigeria,Airtel (Bharti Airtel),621,20
+Nigeria,Smile Communications Nigeria,621,27
+Nigeria,MTN,621,30
+Nigeria,Ntel,621,40
+Nigeria,Glo Mobile (Globacom),621,50
+Nigeria,9mobile,621,60
+Norway,Telenor,242,01
+Norway,Telia,242,02
+Norway,TeliaSonera Norge AS,242,05
+Norway,Phonero (MVNO),242,07
+Norway,TDC (MVNO),242,08
+Norway,Com4 (MVNO),242,09
+Norway,Telenor Norge AS,242,12
+Norway,ICE Communication Norge AS,242,14
+Norway,Jernbaneverket,242,20
+Norway,Lycamobile (MVNO),242,23
+Oman,Omantel,422,02
+Oman,Ooredoo,422,03
+Pakistan,Jazz (Mobilink),410,01
+Pakistan,Ufone (PTCL),410,03
+Pakistan,Zong (China Mobile),410,04
+Pakistan,SCO Mobile Ltd,410,05
+Pakistan,Telenor,410,06
+Pakistan,Jazz (WaridTel),410,07
+Pakistan,SCO Mobile,410,08
+Palau,PNCC,552,01
+Palau,PT Waves,552,02
+Palestine,Jawwal (PalTel),425,05
+Palestine,Wataniya Mobile,425,06
+Panama,Cable & Wireless Panama S.A.,714,01
+Panama,Movistar (Telefónica),714,02
+Panama,Claro (América Móvil),714,03
+Panama,Digicel,714,04
+Papua New Guinea,bemobile,537,01
+Papua New Guinea,Citifon,537,02
+Papua New Guinea,Digicel,537,03
+Paraguay,Vox (Hola),744,01
+Paraguay,Claro (América Móvil),744,02
+Paraguay,Tigo (Millicom),744,04
+Paraguay,Personal (Telecom Argentina),744,05
+Peru,Movistar (Telefónica),716,06
+Peru,Entel,716,07
+Peru,Claro (América Móvil),716,10
+Peru,Bitel (Viettel Mobile),716,15
+Peru,Entel,716,17
+Philippines,Globe Telecom,515,02
+Philippines,Smart (PLDT),515,03
+Philippines,Sun Cellular (PLDT),515,05
+Poland,Plus (Polkomtel),260,01
+Poland,T-Mobile (Deutsche Telekom),260,02
+Poland,Orange (Telekomunikacja Polska),260,03
+Poland,Play (P4),260,06
+Poland,Netia (MVNO),260,07
+Poland,Lycamobile (MVNO),260,09
+Poland,Nordisk Polska,260,11
+Poland,Cyfrowy Polsat (MVNO),260,12
+Poland,Aero2,260,15
+Poland,Aero2,260,16
+Poland,Aero2,260,17
+Poland,Virgin Mobile Polska Sp,260,45
+Portugal,Vodafone,268,01
+Portugal,NOS,268,03
+Portugal,Lycamobile (MVNO),268,04
+Portugal,MEO,268,06
+Puerto Rico,Claro (América Móvil),330,11
+Puerto Rico,Open Mobile,330,12
+Qatar,Ooredoo,427,01
+Qatar,Vodafone,427,02
+Reunion,Orange,647,00
+Reunion,Only (Telco OI),647,02
+Reunion,Zeop,647,04
+Reunion,SFR (Vivendi),647,10
+Romania,Vodafone,226,01
+Romania,Telekom Romania Mobile Comunications,226,03
+Romania,DigiMobil (RCS & RDS),226,05
+Romania,Orange,226,10
+Romania,Lycamobile (MVNO),226,16
+Russia,MTS,250,01
+Russia,MegaFon,250,02
+Russia,NCC (T2),250,03
+Russia,ETK (T2),250,05
+Russia,Danycom,250,06
+Russia,SMARTS,250,07
+Russia,Vainah Telecom,250,08
+Russia,Skylink,250,09
+Russia,Yota (MVNO),250,11
+Russia,Baykalwestcom (T2),250,12
+Russia,Lycamobile,250,13
+Russia,Utel,250,17
+Russia,Tele2,250,20
+Russia,TMT LLC,250,27
+Russia,LLC Antares,250,28
+Russia,K-Telecom,250,32
+Russia,Sevtelekom,250,33
+Russia,MOTIV,250,35
+Russia,Gazprom Telecom,250,41
+Russia,MTT,250,42
+Russia,Sprint,250,43
+Russia,SIM Telecom,250,47
+Russia,Globaltel,250,48
+Russia,Sberbank Telecom (MVNO),250,50
+Russia,KTK Telecom,250,60
+Russia,Tinkoff Mobile (MVNO),250,62
+Russia,Beeline,250,99
+Rwanda,MTN,635,10
+Rwanda,Tigo (Millicom),635,13
+Rwanda,Airtel (Bharti Airtel),635,14
+Saint Kitts and Nevis,FLOW (Cable & Wireless),356,11
+Saint Kitts and Nevis,Chippie (UTS),356,70
+Saint Lucia,LIME (Cable & Wireless),358,11
+Saint Pierre and Miquelon,Ameris (SPM Telecom),308,01
+Saint Vincent and the Grenadines,Digicel,360,07
+Saint Vincent and the Grenadines,Digicel,360,10
+Saint Vincent and the Grenadines,LIME (Cable & Wireless),360,11
+Samoa,Samoa,549,00
+Samoa,Digicel,549,01
+Samoa,BlueSky Communications,549,27
+San Marino,San Marino Telecom,292,01
+Sao Tomé and Principe,CSTmovel,626,01
+Sao Tomé and Principe,Unitel STP,626,02
+Satellite,Elsacom,901,04
+Satellite,RMSS Network,901,05
+Satellite,Maritime Communications Partner (MCP),901,12
+Satellite,Global Networks Switzerland AG,901,13
+Satellite,SITA GSM Service in Aircraft SITA GSM,901,15
+Satellite,EUTEL AB,901,22
+Satellite,AT&T Inc.,901,44
+Saudi Arabia,STC (Saudi Telecom),420,01
+Saudi Arabia,Mobily (Etihad Etisalat),420,03
+Saudi Arabia,Zain,420,04
+Saudi Arabia,Virgin Mobile (MVNO),420,05
+Saudi Arabia,Lebara Mobile,420,06
+Senegal,Orange (Sonatel),608,01
+Senegal,Tigo (Millicom),608,02
+Senegal,Expresso (Sudatel),608,03
+Serbia,Telenor,220,01
+Serbia,mts (Telekom Srbija),220,03
+Serbia,VIP,220,05
+Serbia,Vectone Mobile (MVNO),220,09
+Serbia,Globaltel (MVNO),220,11
+Seychelles,Cable & Wireless,633,01
+Seychelles,Airtel (Bharti Airtel),633,10
+Sierra Leone,Orange,619,01
+Sierra Leone,Africell (Lintel),619,02
+Sierra Leone,Africell (Lintel),619,03
+Sierra Leone,Africell (Lintel),619,05
+Sierra Leone,SierraTel,619,06
+Sierra Leone,Qcell,619,07
+Sierra Leone,Smart Mobile,619,09
+Sierra Leone,Mobitel,619,25
+Singapore,SingTel,525,01
+Singapore,M1,525,03
+Singapore,StarHub,525,05
+Singapore,TPG Telecom,525,10
+Singapore,Grid Communications,525,12
+Sint Maarten,Telcell,362,51
+Slovakia,Orange,231,01
+Slovakia,Telekom (Slovak Telekom),231,02
+Slovakia,4ka (Swan Mobile),231,03
+Slovakia,O2,231,06
+Slovenia,A1,293,40
+Slovenia,Mobitel (Telekom Slovenije),293,41
+Slovenia,T-2,293,64
+Slovenia,Telemach (Tusmobil),293,70
+Solomon Islands,Breeze (Our Telekom),540,01
+Solomon Islands,BMobile (Solomon Islands) Ltd,540,02
+Somalia,Telesom,637,01
+Somalia,Somafone,637,04
+Somalia,NationLink Telecom,637,10
+Somalia,Hormuud Telecom,637,25
+Somalia,Golis Telecom,637,30
+Somalia,Hormuud Telecom,637,50
+Somalia,NationLink Telecom,637,60
+Somalia,Somtel,637,71
+Somalia,Telcom,637,82
 South Africa,Vodacom,655,01
+South Africa,Telkom Mobile,655,02
+South Africa,Cell C,655,07
+South Africa,MTN,655,10
+South Korea,KT,450,02
+South Korea,SK Telecom,450,05
+South Korea,LG Uplus,450,06
+South Korea,olleh (KT),450,08
+South Sudan,MTN,659,02
+South Sudan,Gemtel,659,03
+South Sudan,Vivacell,659,04
+South Sudan,Zain,659,06
+Spain,Vodafone,214,01
+Spain,Orange,214,03
+Spain,Yoigo (Xfera Moviles SA),214,04
+Spain,Movistar (Telefónica) (MVNO),214,05
+Spain,Vodafone (MVNO),214,06
+Spain,Movistar (Telefónica),214,07
+Spain,Euskaltel (MVNO),214,08
+Spain,TeleCable (MVNO),214,16
+Spain,Móbil R (MVNO),214,17
+Spain,Simyo (MVNO),214,19
+Spain,JazzTel (MVNO),214,21
+Spain,DigiMobil (MVNO),214,22
+Spain,Eroski (MVNO),214,24
+Spain,Lycamobile (MVNO),214,25
+Spain,Truphone (MVNO),214,27
+Spain,Tuenti (MVNO),214,32
+Sri Lanka,Mobitel (Sri Lanka Telecom),413,01
+Sri Lanka,Dialog (Axiata),413,02
+Sri Lanka,Etisalat,413,03
+Sri Lanka,Airtel (Bharti Airtel),413,05
+Sri Lanka,Hutch (Hutchison),413,08
+Sudan,Zain,634,01
+Sudan,MTN,634,02
+Sudan,Canar Telecom,634,05
+Sudan,Sudani One (Sudatel),634,07
+Suriname,Telesur,746,02
+Suriname,Digicel,746,03
+Swaziland,SPTC,653,01
+Swaziland,Swazi Mobile Limited,653,02
+Swaziland,Swazi MTN,653,10
+Sweden,Telia (TeliaSonera),240,01
+Sweden,3 (Hutchison),240,02
+Sweden,Telenor,240,06
+Sweden,Tele2,240,07
+Sweden,Telenor,240,08
+Sweden,Spring Mobil (Tele2 Sverige AB),240,10
+Sweden,Lycamobile (MVNO),240,12
+Sweden,Tele2 Business AB,240,14
+Sweden,42 Telecom AB,240,16
+Sweden,Gotanet (MVNO),240,17
+Sweden,Vectone Mobile (MVNO),240,19
+Switzerland,Swisscom,228,01
+Switzerland,Sunrise,228,02
+Switzerland,Salt Mobile SA,228,03
+Switzerland,Tele4u,228,08
+Switzerland,Relario AG (MVNO),228,51
+Switzerland,UPC Cablecom (MVNO),228,53
+Switzerland,Lycamobile (MVNO),228,54
+Switzerland,Beeone (MVNO),228,58
+Syria,Syriatel,417,01
+Syria,MTN,417,02
+Taiwan,Far EasTone,466,01
+Taiwan,Asia Pacific Telecom (APTG),466,05
+Taiwan,Far EasTone,466,88
+Taiwan,T Star,466,89
+Taiwan,Chunghwa Telecom,466,92
+Taiwan,Taiwan Mobile,466,97
+Tajikistan,JV Somoncom (Tcell),436,01
+Tajikistan,Indigo Tajikistan (Tcell),436,02
+Tajikistan,TT Mobile (MegaFon),436,03
+Tajikistan,Babilon-Mobile,436,04
+Tajikistan,Tacom (Beeline),436,05
+Tajikistan,T-Mobile,436,06
+Tanzania,Tigo (Millicom),640,02
+Tanzania,Zantel (Etisalat),640,03
+Tanzania,Vodacom,640,04
+Tanzania,Airtel (Bharti Airtel),640,05
+Tanzania,TTCL Mobile,640,07
+Tanzania,Smart,640,08
+Tanzania,Halotel,640,09
+Thailand,my (CAT Telecom),520,00
+Thailand,AIS,520,03
+Thailand,True Move (True Corporation),520,04
+Thailand,DTAC TriNet,520,05
+Thailand,TOT Mobile,520,15
+Thailand,DTAC,520,18
+Thailand,True Move (True Corporation),520,99
+Timor-Leste,Telkomcel,514,01
+Timor-Leste,Timor Telecom,514,02
+Timor-Leste,Telemor,514,03
+Togo,Togo Cell,615,01
+Togo,Moov Togo,615,03
+Tonga,U-Call (Tonga Telecom),539,01
+Tonga,Shoreline Communication,539,43
+Tonga,Digicel,539,88
+Trinidad and Tobago,bmobile (TSTT),374,12
+Trinidad and Tobago,Digicel,374,13
+Tunisia,Orange,605,01
+Tunisia,Tunicell (Tunisie Telecom),605,02
+Tunisia,Ooredoo TN,605,03
+Tunisia,Lycamobile,605,06
+Turkey,Turkcell,286,01
+Turkey,Vodafone,286,02
+Turkey,Türk Telekom,286,03
+Turkey,KKTCell,286,99
+Turkmenistan,TM-Cell (Altyn Asyr),438,02
+Turks and Caicos Islands,Digicel,338,50
+Turks and Caicos Islands,FLOW (Cable & Wireless),376,35
+Tuvalu,TTC (Tuvalu Telecom),553,01
+Uganda,Airtel (Bharti Airtel),641,01
+Uganda,Vodafone (Afrimax),641,06
+Uganda,MTN,641,10
+Uganda,UT Mobile (Uganda Telecom),641,11
+Uganda,Africell,641,14
+Uganda,Smart (Suretelecom Uganda),641,18
+Uganda,Airtel (Bharti Airtel),641,22
+Uganda,Smile,641,33
+Uganda,K2 (MVNO),641,44
+Ukraine,Vodafone (PRJSC VF Ukraine),255,01
+Ukraine,Kyivstar,255,02
+Ukraine,Kyivstar JSC (Kyivstar),255,03
+Ukraine,Intertelecom LLC,255,04
+Ukraine,Lifecell,255,06
+Ukraine,Trimob LLC,255,07
+Ukraine,PEOPLEnet,255,21
+Ukraine,Phoenix,255,99
+United Arab Emirates,Etisalat,424,02
+United Arab Emirates,du,424,03
+United Kingdom,BT,234,00
+United Kingdom,Vectone Mobile (MVNO),234,01
+United Kingdom,Tismi BV,234,09
+United Kingdom,O2 (Telefónica),234,10
+United Kingdom,Vodafone,234,15
+United Kingdom,Cloud9 (MVNO),234,18
+United Kingdom,3 (Hutchison),234,20
+United Kingdom,Greenfone (MVNO),234,24
+United Kingdom,Lycamobile (MVNO),234,26
+United Kingdom,T-Mobile UK (EE),234,30
+United Kingdom,Orange (EE),234,33
+United Kingdom,Virgin Mobile,234,38
+United Kingdom,Sky UK Limited,234,57
+United Kingdom,Lleida,234,99
 United States,Verizon Wireless,310,00
+United States,Verizon Wireless,310,01
+United States,Union Wireless,310,02
+United States,AT&T Mobility,310,03
+United States,AT&T Mobility,310,04
+United States,Consolidated Telcom,310,06
+United States,AT&T Mobility,310,07
+United States,Corr Wireless (Merged Q1 2010),310,08
+United States,Cricket Communications (Leap Wireless),310,09
+United States,Plateau Wireless,310,10
+United States,Sprint (SoftBank),310,12
+United States,AT&T Mobility,310,15
+United States,T-Mobile (Deutsche Telekom),310,16
+United States,T-Mobile (Deutsche Telekom),310,17
+United States,West Central Wireless,310,18
+United States,Alaska Communications,310,19
+United States,T-Mobile (Deutsche Telekom),310,26
+United States,Big Sky Mobile (iSmart Mobile),310,30
+United States,T-Mobile,310,31
+United States,WestLink Communications (Pioneer Communi,310,34
+United States,AT&T Mobility,310,38
+United States,Cellular One (TX-11),310,39
+United States,AT&T Mobility,310,41
+United States,Cincinnati Bell Wireless,310,42
+United States,Alaska Communications,310,43
+United States,AT&T Mobility,310,44
+United States,Viaero Wireless,310,45
+United States,US Cellular (TDS),310,46
+United States,T-Mobile (Deutsche Telekom),310,49
+United States,Alltel Wireless (ATN),310,50
+United States,Cellcom (Nsight),310,51
+United States,VeriSign (Transactions Network Services),310,52
+United States,T-Mobile (Deutsche Telekom),310,53
+United States,Oklahoma Western Telephone Company,310,54
+United States,AT&T Mobility,310,56
+United States,AT&T Mobility,310,57
+United States,T-Mobile (Deutsche Telekom),310,58
+United States,Alltel Wireless (ATN),310,59
+United States,Epic Touch,310,61
+United States,Cellcom (Nsight),310,62
+United States,AmeriLink PCS,310,63
+United States,AirFire Mobile (Airadigm Communications),310,64
+United States,Jasper,310,65
+United States,T-Mobile (Deutsche Telekom),310,66
+United States,AT&T Mobility,310,67
+United States,AT&T Mobility,310,68
+United States,Immix Wireless,310,69
+United States,U.S. Cellular,310,73
+United States,Convey,310,74
+United States,PTCI (Panhandle Telephone Cooperative),310,76
+United States,T-Mobile (Deutsche Telekom),310,77
+United States,Airlink PCS,310,78
+United States,Pinpoint Communications,310,79
+United States,T-Mobile (Deutsche Telekom),310,80
+United States,Caprock,310,83
+United States,telna Mobile,310,84
+United States,Aeris,310,85
+United States,Pace (Kaplan Telephone Company),310,87
+United States,DTC Wireless,310,88
+United States,Verizon Wireless,310,89
+United States,Mid-Rivers Wireless,310,90
+United States,Cellcom (Nsight),310,91
+United States,Iris Wireless LLC,310,94
+United States,AT&T Mobility,310,95
+United States,Plateau Wireless,310,96
+United States,AT&T Mobility,310,98
+United States,AT&T Mobility,310,99
+United States,Mid-Tex Cellular,311,00
+United States,Chariton Valley Telephone Company,311,01
+United States,Chariton Valley Telephone Company,311,02
+United States,Indigo Wireless,311,03
+United States,Commnet Wireless (ATN),311,04
+United States,Wikes Cellular,311,05
+United States,AT&T Mobility,311,06
+United States,AT&T Mobility,311,07
+United States,Pine Cellular,311,08
+United States,Long Lines Wireless,311,09
+United States,High Plains Wireless,311,10
+United States,CLEAR (Clearwire),311,11
+United States,Choise Phone,311,12
+United States,AT&T Mobility,311,13
+United States,Sprocket Wireless (Cross Communications),311,14
+United States,Wikes Cellular,311,15
+United States,AT&T Mobility,311,16
+United States,AT&T Mobility,311,17
+United States,AT&T Mobility,311,18
+United States,Cellular One (Cellular Properties),311,19
+United States,Emery Telecom,311,21
+United States,US Cellular (TDS),311,22
+United States,C Spire Wireless (Telapex),311,23
+United States,Wave Runner Llc,311,25
+United States,AT&T Mobility,311,26
+United States,Leaco Wireless,311,31
+United States,Bug Tussel Wireless (Hilbert Communicati,311,33
+United States,Stelera Wireless,311,36
+United States,GCI,311,37
+United States,Verizon Wireless,311,48
+United States,OTZ Cellular,311,56
+United States,T-Mobile (Deutsche Telekom),311,66
+United States,Bluegrass Wireless LLC,311,81
+United States,Big River Broadband,311,97
+United States,Nextel,316,01
+United States,Nextel Communications Inc.,316,10
+Uruguay,Antel,748,01
+Uruguay,Movistar (Telefónica),748,07
+Uruguay,Claro (América Móvil),748,10
+Uzbekistan,Beeline (Unitel LLC),434,04
+Uzbekistan,Ucell (Coscom),434,05
+Uzbekistan,Perfectum Mobile,434,06
+Uzbekistan,UMS,434,07
+Uzbekistan,UzMobile,434,08
+Vanuatu,Smile (Telecom Vanuatu),541,01
+Vanuatu,Digicel,541,05
+Venezuela,Digitel,734,02
+Venezuela,DirecTV,734,03
+Venezuela,Movistar (Telefónica),734,04
+Venezuela,Movilnet,734,06
+Vietnam,MobiFone,452,01
+Vietnam,Vinaphone (VNPT),452,02
+Vietnam,Viettel Mobile,452,04
+Vietnam,Vietnamobile (Hanoi Telecom),452,05
+Vietnam,Gmobile (GTEL Mobile),452,07
+Wallis and Futuna,Manuia,543,01
+WESTERN SAMOA,SAMOA TEL,338,27
+Yemen,Sabafon,421,01
+Yemen,MTN,421,02
+Yemen,Yemen Mobile (CDMA),421,03
+Yemen,Y,421,04
+Zambia,Airtel (Bharti Airtel),645,01
+Zambia,MTN,645,02
+Zambia,Zamtel,645,03
+Zimbabwe,NetOne,648,01
+Zimbabwe,Telecel,648,03
+Zimbabwe,Econet Wireless,648,04

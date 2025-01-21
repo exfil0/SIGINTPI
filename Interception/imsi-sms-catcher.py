@@ -1,48 +1,81 @@
 #!/usr/bin/env python3
 """
-GSM Wizard (Headless) - Hacker-Style UI
+GSM Wizard (Headless) - Hacker-Style UI + MCC/MNC CSV Lookup
 
-Enhanced Script:
- - Includes additional TShark fields for LAC, SMS, IMEI, IMEISV.
+Includes:
+ - Additional TShark fields for LAC, SMS, IMEI, IMEISV.
  - Terminates leftover processes on port 4729.
  - Checks/install dependencies (python3, gr-gsm, tshark).
  - Lets you pick SDR device.
- - Adds an option to provide a known frequency (e.g., "925.2M") or ARFCN (e.g., "ARFCN=123"), skipping scanner.
- - If no known frequency is provided, runs grgsm_scanner -> parses ARFCN/freq, user picks channel.
- - Launches grgsm_livemon_headless (or fallback) in background.
- - Runs TShark line-buffered in the foreground.
+ - Optionally provide known frequency/ARFCN, else run grgsm_scanner (with extended "Found:" lines).
+ - Attempts to look up MCC/MNC in a CSV file to display Country/Network.
+ - Launches grgsm_livemon_headless in the background (or fallback).
+ - Runs TShark in the foreground, also doing MCC/MNC CSV lookups if available.
  - Terminates livemon on exit.
 
 Usage:
   sudo python3 exfil0IMSI.py
-
-Examples for manually entering frequency or ARFCN during script execution:
-  - Frequency: 925.2M
-  - ARFCN: ARFCN=123
-
-If you see "Address already in use", port 4729 is locked.
-If no lines appear, phone might not be forced to 2G or is quickly re-assigning TMSI.
 """
 
+import csv
 import subprocess
 import sys
 import re
 import os
 import time
 
-# Hacker-ish ANSI codes (green text on black style).
+# Hacker-ish ANSI codes
 RESET  = "\033[0m"
 BOLD   = "\033[1m"
 GREEN  = "\033[92m"
 RED    = "\033[91m"
 
+# ---------------------------------------------------------------------
+#   1) CSV LOADER for MCC/MNC
+# ---------------------------------------------------------------------
+def load_mcc_mnc_csv(csv_filename):
+    """
+    Load a CSV file of MCC/MNC records, returning a dictionary keyed by (MCC, MNC).
+    Expected columns: 'Country','Network','MCC','MNC' (case-sensitive in code).
+    Returns:
+        lookup_dict = {
+           (mcc_str, mnc_str): (country, network),
+           ...
+        }
+    """
+    lookup_dict = {}
 
+    if not os.path.isfile(csv_filename):
+        print(f"{RED}CSV file '{csv_filename}' not found!{RESET} Skipping MCC/MNC lookup.\n")
+        return lookup_dict
+
+    try:
+        with open(csv_filename, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                try:
+                    country = row['Country'].strip()
+                    network = row['Network'].strip()
+                    mcc = row['MCC'].strip()
+                    mnc = row['MNC'].strip()
+                    lookup_dict[(mcc, mnc)] = (country, network)
+                except KeyError:
+                    # If columns are missing, ignore that row
+                    continue
+    except Exception as e:
+        print(f"{RED}Error reading CSV '{csv_filename}': {e}{RESET}\n")
+
+    return lookup_dict
+
+
+# ---------------------------------------------------------------------
+#   2) Banner & Housekeeping
+# ---------------------------------------------------------------------
 def print_banner():
-    """Prints a hacker-style ASCII banner."""
+    """ Hacker-style ASCII banner. """
     print(f"{BOLD}{GREEN}")
     print("Evade the matrix. Sniff IMSI. Let's go...\n")
-    print(RESET, end="")  # Reset style for the rest of the output
-
+    print(RESET, end="")
 
 def kill_leftover_processes():
     """
@@ -57,8 +90,6 @@ def kill_leftover_processes():
         return
 
     lines = result.stdout.strip().split("\n")
-
-    # If lsof output has at least one line of actual usage, first line is typically a header with "PID"
     if len(lines) > 1 and "PID" in lines[0]:
         for line in lines[1:]:
             parts = line.split()
@@ -78,7 +109,6 @@ def check_or_install_deps():
     print(f"{GREEN}>>> Checking Dependencies...{RESET}")
     packages = ["python3", "gr-gsm", "tshark"]
     missing = []
-
     for pkg in packages:
         cmd = ["dpkg", "-s", pkg]
         result = subprocess.run(cmd, capture_output=True, text=True, check=False)
@@ -99,6 +129,9 @@ def check_or_install_deps():
         print("All required packages found!\n")
 
 
+# ---------------------------------------------------------------------
+#   3) Device Selection
+# ---------------------------------------------------------------------
 def pick_device():
     """
     User picks device from [RTL-SDR, HackRF, BladeRF].
@@ -127,93 +160,49 @@ def pick_device():
     return selected[1]
 
 
+# ---------------------------------------------------------------------
+#   4) ARFCN/Freq Parsing
+# ---------------------------------------------------------------------
 def parse_arfcn_or_freq(arfcn_str):
     """
     Parse a user input that may be 'ARFCN=123' or a frequency like '925.2M'.
-    Returns:
-      (arfcn, freq_str)
-      - arfcn: str or None
-      - freq_str: str or None
+    Returns (arfcn, freq_str).
     """
     arfcn_pattern = re.compile(r"^ARFCN=(\d+)$", re.IGNORECASE)
     freq_pattern = re.compile(r"^\d+(\.\d+)?[MG]$", re.IGNORECASE)
 
-    # Check if input matches "ARFCN=<number>"
     match_arfcn = arfcn_pattern.match(arfcn_str)
     if match_arfcn:
         return match_arfcn.group(1), None
 
-    # Check if input matches a frequency pattern (like '925.2M' or '1.8G')
     match_freq = freq_pattern.match(arfcn_str)
     if match_freq:
         return None, arfcn_str
 
-    # If nothing matches, return (None, None)
     return None, None
-
 
 def convert_arfcn_to_freq(arfcn):
     """
-    For simplicity, we won't implement a real ARFCN->Freq map here.
-    In real usage, you'd need the specific GSM band plan.
-
-    This function returns a dummy freq string or raises an error if unknown.
+    Simple, naive ARFCN -> Frequency conversion for demonstration.
+    Adjust for a real GSM band plan as needed.
     """
-    # Hard-coded example or any simple mapping (for demonstration only).
-    # In practice, different ARFCNs map to different bands/frequencies.
-    # E.g., ARFCN 123 might correspond to 935.6M in certain bands, etc.
-    # Please adjust as needed for your actual environment/band plan.
     if arfcn.isdigit():
-        # Just a naive example offset: ARFCN * 0.2 + 900
         freq_mhz = 900.0 + (int(arfcn) * 0.2)
         return f"{freq_mhz}M"
     else:
         raise ValueError(f"Invalid ARFCN: {arfcn}")
 
 
-def pick_frequency_or_scan(device_arg):
+# ---------------------------------------------------------------------
+#   5) Scanning with Extended Regex & CSV Lookup
+# ---------------------------------------------------------------------
+def scan_for_channels(device_arg, mcc_mnc_dict):
     """
-    Prompts the user to optionally enter a known frequency or ARFCN.
-    If provided, skip scanning. Otherwise, proceed with scanning.
-    Returns: freq_str in the format recognized by grgsm_livemon_headless.
-    """
-    print(f"{GREEN}>>> Frequency/ARFCN override (optional){RESET}")
-    print("If you already know the frequency or ARFCN, enter it now (e.g., '925.2M' or 'ARFCN=123').")
-    print("Press Enter to skip and perform a full scan.\n")
+    Runs 'grgsm_scanner --args <device_arg>' and parses lines including
+    ARFCN, Freq, CID, LAC, MCC, MNC, Pwr. Also does a CSV lookup to display
+    Country/Network if (MCC, MNC) is in mcc_mnc_dict.
 
-    user_input = input("Manual frequency/ARFCN (blank for scan): ").strip()
-
-    if not user_input:
-        # No manual input, do scanning
-        channels = scan_for_channels(device_arg)
-        arfcn, freq_found = pick_channel(channels)  # pick_channel returns (arfcn, freq)
-        return freq_found
-
-    # If we have user input, parse it
-    user_arfcn, user_freq = parse_arfcn_or_freq(user_input)
-    if user_arfcn is None and user_freq is None:
-        print(f"{RED}Invalid frequency/ARFCN format! Exiting.{RESET}")
-        sys.exit(1)
-
-    if user_arfcn:
-        # Convert ARFCN to frequency string
-        try:
-            freq_str = convert_arfcn_to_freq(user_arfcn)
-            print(f"{GREEN}Using ARFCN={user_arfcn}, frequency={freq_str}{RESET}\n")
-            return freq_str
-        except ValueError as ex:
-            print(f"{RED}{ex}{RESET}")
-            sys.exit(1)
-    else:
-        # We have a direct frequency
-        print(f"{GREEN}Using provided frequency={user_freq}{RESET}\n")
-        return user_freq
-
-
-def scan_for_channels(device_arg):
-    """
-    Runs 'grgsm_scanner --args <device_arg>'.
-    Parse lines for ARFCN/freq.
+    Returns a list of (arfcn, freq).
     """
     print(f"{GREEN}>>> Scanning GSM Band...{RESET}")
     cmd = ["grgsm_scanner", "--args", device_arg]
@@ -227,7 +216,13 @@ def scan_for_channels(device_arg):
         sys.exit(1)
 
     channels = []
-    regex = re.compile(r"ARFCN:\s+(\d+),\s+Freq:\s+([\d\.]+[MG])")
+
+    # This regex matches lines like:
+    # Found: ARFCN:  975, Freq:  925.2M, CID: 38001, LAC: 30412, MCC: 655, MNC:  10, Pwr: -26
+    regex = re.compile(
+        r"ARFCN:\s+(\d+),\s+Freq:\s+([\d\.]+[MG]),\s+CID:\s+(\d+),"
+        r"\s+LAC:\s+(\d+),\s+MCC:\s+(\d+),\s+MNC:\s+(\d+),\s+Pwr:\s+(-?\d+)"
+    )
 
     try:
         for line in process.stdout:
@@ -236,8 +231,27 @@ def scan_for_channels(device_arg):
             if match:
                 arfcn = match.group(1)
                 freq  = match.group(2)
+                cid   = match.group(3)
+                lac   = match.group(4)
+                mcc   = match.group(5)
+                mnc   = match.group(6)
+                pwr   = match.group(7)
+
+                # We'll store ARFCN/freq in our channel list
                 channels.append((arfcn, freq))
-                print(f"{GREEN}Found:{RESET} {line_s}")
+
+                # Lookup in CSV
+                country_str, network_str = ("", "")
+                if (mcc, mnc) in mcc_mnc_dict:
+                    country_str, network_str = mcc_mnc_dict[(mcc, mnc)]
+
+                # Print extended info
+                print(
+                    f"{GREEN}Found:{RESET} "
+                    f"ARFCN: {arfcn}, Freq: {freq}, CID: {cid}, LAC: {lac}, "
+                    f"MCC: {mcc}, MNC: {mnc}, Pwr: {pwr}, "
+                    f"[Country={country_str}, Network={network_str}]"
+                )
     except KeyboardInterrupt:
         print("Scan aborted by user.\n")
 
@@ -279,6 +293,45 @@ def pick_channel(channels):
     return sel
 
 
+def pick_frequency_or_scan(device_arg, mcc_mnc_dict):
+    """
+    Prompt for manual freq or ARFCN override. If blank, run scan_for_channels().
+    Return the final frequency string.
+    """
+    print(f"{GREEN}>>> Frequency/ARFCN override (optional){RESET}")
+    print("If you already know the frequency or ARFCN, enter it now (e.g., '925.2M' or 'ARFCN=123').")
+    print("Press Enter to skip and perform a full scan.\n")
+
+    user_input = input("Manual frequency/ARFCN (blank for scan): ").strip()
+
+    if not user_input:
+        # No manual input -> do scanning
+        channels = scan_for_channels(device_arg, mcc_mnc_dict)
+        arfcn, freq_found = pick_channel(channels)
+        return freq_found
+
+    # Parse input
+    user_arfcn, user_freq = parse_arfcn_or_freq(user_input)
+    if user_arfcn is None and user_freq is None:
+        print(f"{RED}Invalid frequency/ARFCN format! Exiting.{RESET}")
+        sys.exit(1)
+
+    if user_arfcn:
+        try:
+            freq_str = convert_arfcn_to_freq(user_arfcn)
+            print(f"{GREEN}Using ARFCN={user_arfcn}, frequency={freq_str}{RESET}\n")
+            return freq_str
+        except ValueError as ex:
+            print(f"{RED}{ex}{RESET}")
+            sys.exit(1)
+    else:
+        print(f"{GREEN}Using provided frequency={user_freq}{RESET}\n")
+        return user_freq
+
+
+# ---------------------------------------------------------------------
+#   6) grgsm_livemon
+# ---------------------------------------------------------------------
 def run_livemon_headless(device_arg, freq_str):
     """
     Try 'grgsm_livemon_headless' or fallback to 'grgsm_livemon -p'.
@@ -316,9 +369,23 @@ def run_livemon_headless(device_arg, freq_str):
     return proc
 
 
-def run_tshark_capture():
+# ---------------------------------------------------------------------
+#   7) TShark + CSV Lookup
+# ---------------------------------------------------------------------
+def parse_tshark_csv_line(tshark_line):
     """
-    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, SMS, LAC, IMEI, IMEISV.
+    Parse a CSV line from TShark using Python's csv module.
+    """
+    import io
+    reader = csv.reader(io.StringIO(tshark_line), quotechar='"', delimiter=',')
+    for row in reader:
+        return row
+    return []
+
+def run_tshark_capture(mcc_mnc_dict):
+    """
+    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, etc.
+    Append country/network if MCC/MNC found in mcc_mnc_dict.
     """
     print(f"{GREEN}>>> Launching TShark...{RESET}\n")
     cmd = [
@@ -345,9 +412,41 @@ def run_tshark_capture():
 
     try:
         with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1) as proc:
+            # Print header with appended columns
+            header_line = proc.stdout.readline().rstrip('\n')
+            if header_line:
+                print(f"{header_line},\"Country\",\"Network\"")
+
             try:
                 for line in proc.stdout:
-                    print(line, end='')
+                    line_str = line.strip('\n')
+                    if not line_str:
+                        continue
+
+                    csv_fields = parse_tshark_csv_line(line_str)
+                    # Indices:
+                    # 0: frame.time
+                    # 1: e212.imsi
+                    # 2: e212.mcc
+                    # 3: e212.mnc
+                    # 4: gsm_a.tmsi
+                    # 5: gsm_a.lac
+                    # 6: gsm_sms.sms_text
+                    # 7: gsm_a.imei
+                    # 8: gsm_a.imeisv
+
+                    mcc_val = csv_fields[2] if len(csv_fields) > 2 else ""
+                    mnc_val = csv_fields[3] if len(csv_fields) > 3 else ""
+
+                    country_str = ""
+                    network_str = ""
+
+                    if mcc_val and mnc_val and (mcc_val, mnc_val) in mcc_mnc_dict:
+                        country_str, network_str = mcc_mnc_dict[(mcc_val, mnc_val)]
+
+                    # Print original line + appended CSV
+                    print(f"{line_str},\"{country_str}\",\"{network_str}\"")
+
             except KeyboardInterrupt:
                 print(f"{RED}\nTShark interrupted by user.{RESET}")
                 proc.terminate()
@@ -362,8 +461,11 @@ def run_tshark_capture():
         sys.exit(1)
 
 
+# ---------------------------------------------------------------------
+#   8) Main
+# ---------------------------------------------------------------------
 def main():
-    # 1) Print Banner
+    # 1) Banner
     print_banner()
 
     # 2) Kill leftover processes
@@ -372,19 +474,23 @@ def main():
     # 3) Check dependencies
     check_or_install_deps()
 
-    # 4) Choose device
+    # 4) Pick device
     dev_arg = pick_device()
 
-    # 5) Prompt for known frequency/ARFCN or do scanning
-    freq_str = pick_frequency_or_scan(dev_arg)
+    # 5) Load MCC/MNC CSV
+    # Modify filename/path to your actual CSV. If missing, script just won't annotate.
+    mcc_mnc_dict = load_mcc_mnc_csv("mcc_mnc_list.csv")
 
-    # 6) Launch livemon headless
+    # 6) Pick frequency or do scanning
+    freq_str = pick_frequency_or_scan(dev_arg, mcc_mnc_dict)
+
+    # 7) Launch grgsm_livemon
     livemon_proc = run_livemon_headless(dev_arg, freq_str)
 
-    # 7) Run TShark in foreground
-    run_tshark_capture()
+    # 8) Run TShark capture
+    run_tshark_capture(mcc_mnc_dict)
 
-    # 8) Kill livemon
+    # 9) Kill livemon
     print(f"{RED}\nTerminating grgsm_livemon...{RESET}")
     try:
         livemon_proc.terminate()

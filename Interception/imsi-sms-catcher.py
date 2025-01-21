@@ -2,15 +2,14 @@
 """
 GSM Wizard (Headless) - Hacker-Style UI + MCC/MNC CSV Lookup
 
-Includes:
- - Additional TShark fields for LAC, SMS, IMEI, IMEISV.
+This script:
  - Terminates leftover processes on port 4729.
  - Checks/install dependencies (python3, gr-gsm, tshark).
  - Lets you pick SDR device.
- - Optionally provide known frequency/ARFCN, else run grgsm_scanner (with extended "Found:" lines).
- - Attempts to look up MCC/MNC in a CSV file to display Country/Network.
+ - Optionally provide known freq/ARFCN (e.g., '925.2M' or 'ARFCN=123'), else runs grgsm_scanner with extended fields.
+ - Loads MCC/MNC from a huge CSV file 'mcc_mnc_list.csv' to display Country/Network in both scanner and TShark output.
  - Launches grgsm_livemon_headless in the background (or fallback).
- - Runs TShark in the foreground, also doing MCC/MNC CSV lookups if available.
+ - Runs TShark in the foreground with line-buffered output.
  - Terminates livemon on exit.
 
 Usage:
@@ -24,24 +23,20 @@ import re
 import os
 import time
 
-# Hacker-ish ANSI codes
+# ANSI color codes
 RESET  = "\033[0m"
 BOLD   = "\033[1m"
 GREEN  = "\033[92m"
 RED    = "\033[91m"
 
+
 # ---------------------------------------------------------------------
-#   1) CSV LOADER for MCC/MNC
+# 1) CSV LOADER for MCC/MNC
 # ---------------------------------------------------------------------
 def load_mcc_mnc_csv(csv_filename):
     """
-    Load a CSV file of MCC/MNC records, returning a dictionary keyed by (MCC, MNC).
-    Expected columns: 'Country','Network','MCC','MNC' (case-sensitive in code).
-    Returns:
-        lookup_dict = {
-           (mcc_str, mnc_str): (country, network),
-           ...
-        }
+    Load a CSV file of MCC/MNC records, returning a dict keyed by (MCC, MNC).
+    The CSV must have columns: Country,Network,MCC,MNC
     """
     lookup_dict = {}
 
@@ -60,8 +55,7 @@ def load_mcc_mnc_csv(csv_filename):
                     mnc = row['MNC'].strip()
                     lookup_dict[(mcc, mnc)] = (country, network)
                 except KeyError:
-                    # If columns are missing, ignore that row
-                    continue
+                    continue  # missing columns, skip
     except Exception as e:
         print(f"{RED}Error reading CSV '{csv_filename}': {e}{RESET}\n")
 
@@ -69,7 +63,7 @@ def load_mcc_mnc_csv(csv_filename):
 
 
 # ---------------------------------------------------------------------
-#   2) Banner & Housekeeping
+# 2) Banner & Housekeeping
 # ---------------------------------------------------------------------
 def print_banner():
     """ Hacker-style ASCII banner. """
@@ -130,7 +124,7 @@ def check_or_install_deps():
 
 
 # ---------------------------------------------------------------------
-#   3) Device Selection
+# 3) Device Selection
 # ---------------------------------------------------------------------
 def pick_device():
     """
@@ -161,7 +155,7 @@ def pick_device():
 
 
 # ---------------------------------------------------------------------
-#   4) ARFCN/Freq Parsing
+# 4) ARFCN/Freq Parsing
 # ---------------------------------------------------------------------
 def parse_arfcn_or_freq(arfcn_str):
     """
@@ -194,7 +188,7 @@ def convert_arfcn_to_freq(arfcn):
 
 
 # ---------------------------------------------------------------------
-#   5) Scanning with Extended Regex & CSV Lookup
+# 5) Scanning with Extended Regex & CSV Lookup
 # ---------------------------------------------------------------------
 def scan_for_channels(device_arg, mcc_mnc_dict):
     """
@@ -217,8 +211,8 @@ def scan_for_channels(device_arg, mcc_mnc_dict):
 
     channels = []
 
-    # This regex matches lines like:
-    # Found: ARFCN:  975, Freq:  925.2M, CID: 38001, LAC: 30412, MCC: 655, MNC:  10, Pwr: -26
+    # Matches lines like:
+    #   Found: ARFCN:  975, Freq:  925.2M, CID: 38001, LAC: 30412, MCC: 655, MNC:  10, Pwr: -26
     regex = re.compile(
         r"ARFCN:\s+(\d+),\s+Freq:\s+([\d\.]+[MG]),\s+CID:\s+(\d+),"
         r"\s+LAC:\s+(\d+),\s+MCC:\s+(\d+),\s+MNC:\s+(\d+),\s+Pwr:\s+(-?\d+)"
@@ -237,7 +231,6 @@ def scan_for_channels(device_arg, mcc_mnc_dict):
                 mnc   = match.group(6)
                 pwr   = match.group(7)
 
-                # We'll store ARFCN/freq in our channel list
                 channels.append((arfcn, freq))
 
                 # Lookup in CSV
@@ -305,12 +298,12 @@ def pick_frequency_or_scan(device_arg, mcc_mnc_dict):
     user_input = input("Manual frequency/ARFCN (blank for scan): ").strip()
 
     if not user_input:
-        # No manual input -> do scanning
+        # No manual input -> scanning
         channels = scan_for_channels(device_arg, mcc_mnc_dict)
         arfcn, freq_found = pick_channel(channels)
         return freq_found
 
-    # Parse input
+    # parse
     user_arfcn, user_freq = parse_arfcn_or_freq(user_input)
     if user_arfcn is None and user_freq is None:
         print(f"{RED}Invalid frequency/ARFCN format! Exiting.{RESET}")
@@ -330,7 +323,7 @@ def pick_frequency_or_scan(device_arg, mcc_mnc_dict):
 
 
 # ---------------------------------------------------------------------
-#   6) grgsm_livemon
+# 6) grgsm_livemon
 # ---------------------------------------------------------------------
 def run_livemon_headless(device_arg, freq_str):
     """
@@ -370,7 +363,7 @@ def run_livemon_headless(device_arg, freq_str):
 
 
 # ---------------------------------------------------------------------
-#   7) TShark + CSV Lookup
+# 7) TShark + CSV Lookup
 # ---------------------------------------------------------------------
 def parse_tshark_csv_line(tshark_line):
     """
@@ -382,9 +375,10 @@ def parse_tshark_csv_line(tshark_line):
         return row
     return []
 
+
 def run_tshark_capture(mcc_mnc_dict):
     """
-    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, etc.
+    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, LAC, SMS, IMEI, IMEISV.
     Append country/network if MCC/MNC found in mcc_mnc_dict.
     """
     print(f"{GREEN}>>> Launching TShark...{RESET}\n")
@@ -462,7 +456,7 @@ def run_tshark_capture(mcc_mnc_dict):
 
 
 # ---------------------------------------------------------------------
-#   8) Main
+# 8) Main
 # ---------------------------------------------------------------------
 def main():
     # 1) Banner
@@ -478,8 +472,7 @@ def main():
     dev_arg = pick_device()
 
     # 5) Load MCC/MNC CSV
-    # Modify filename/path to your actual CSV. If missing, script just won't annotate.
-    mcc_mnc_dict = load_mcc_mnc_csv("mcc_mnc_list.csv")
+    mcc_mnc_dict = load_mcc_mnc_csv("mcc_mnc_list.csv")  # Adjust if CSV is named differently
 
     # 6) Pick frequency or do scanning
     freq_str = pick_frequency_or_scan(dev_arg, mcc_mnc_dict)

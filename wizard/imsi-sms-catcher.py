@@ -2,17 +2,16 @@
 """
 GSM Wizard (Headless) - Hacker-Style UI
 
-This script:
- 1) Terminates leftover processes on port 4729
- 2) Checks/install python3, gr-gsm, tshark
- 3) Lets you pick SDR device
- 4) Runs grgsm_scanner -> parse ARFCN/freq
- 5) Let user pick channel
- 6) Launch grgsm_livemon_headless (or fallback) in background
- 7) Run TShark line-buffered in the foreground
- 8) Kill livemon on exit
-
-Hackerish look & feel with ASCII art and green text.
+Enhanced Script:
+ - Includes additional TShark fields for LAC, SMS, IMEI, IMEISV.
+ - Terminates leftover processes on port 4729.
+ - Checks/install dependencies (python3, gr-gsm, tshark).
+ - Lets you pick SDR device.
+ - Runs grgsm_scanner -> parses ARFCN/freq.
+ - Lets user pick channel.
+ - Launches grgsm_livemon_headless (or fallback) in background.
+ - Runs TShark line-buffered in the foreground.
+ - Terminates livemon on exit.
 
 Usage:
   sudo python3 exfil0IMSI.py
@@ -33,10 +32,12 @@ BOLD   = "\033[1m"
 GREEN  = "\033[92m"
 RED    = "\033[91m"
 
+
 def print_banner():
     """ Hacker-style ASCII banner. """
     print(f"{BOLD}{GREEN}")
     print("Evade the matrix. Sniff IMSI. Let's go...\n")
+
 
 def kill_leftover_processes():
     """
@@ -57,6 +58,7 @@ def kill_leftover_processes():
         print()
     else:
         print("No leftover processes found.\n")
+
 
 def check_or_install_deps():
     """
@@ -84,6 +86,7 @@ def check_or_install_deps():
     else:
         print("All required packages found!\n")
 
+
 def pick_device():
     """
     User picks device from [RTL-SDR, HackRF, BladeRF].
@@ -110,6 +113,7 @@ def pick_device():
     selected = devices[idx]
     print(f"{GREEN}Device chosen:{RESET} {selected[0]}\n")
     return selected[1]
+
 
 def scan_for_channels(device_arg):
     """
@@ -147,6 +151,7 @@ def scan_for_channels(device_arg):
 
     return channels
 
+
 def pick_channel(channels):
     """
     Prompt user to pick from discovered ARFCN/freq.
@@ -171,6 +176,7 @@ def pick_channel(channels):
     sel = channels[idx]
     print(f"{GREEN}Selected ARFCN={sel[0]}, freq={sel[1]}{RESET}\n")
     return sel
+
 
 def run_livemon_headless(device_arg, freq_str):
     """
@@ -203,9 +209,10 @@ def run_livemon_headless(device_arg, freq_str):
     print("grgsm_livemon launched. If signal is poor, no data might appear.\n")
     return proc
 
+
 def run_tshark_capture():
     """
-    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, SMS.
+    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, SMS, LAC, IMEI, IMEISV.
     """
     print(f"{GREEN}>>> Launching TShark...{RESET}\n")
     cmd = [
@@ -213,14 +220,17 @@ def run_tshark_capture():
         "-i", "lo",
         "-f", "port 4729 and not icmp and udp",
         "-l",
-        "-Y", "(e212.imsi or e212.mcc or e212.mnc or gsm_a.tmsi or gsm_sms.sms_text)",
+        "-Y", "(e212.imsi or e212.mcc or e212.mnc or gsm_a.tmsi or gsm_a.lac or gsm_sms.sms_text or gsm_a.imei or gsm_a.imeisv)",
         "-T", "fields",
         "-e", "frame.time",
         "-e", "e212.imsi",
         "-e", "e212.mcc",
         "-e", "e212.mnc",
         "-e", "gsm_a.tmsi",
+        "-e", "gsm_a.lac",
         "-e", "gsm_sms.sms_text",
+        "-e", "gsm_a.imei",
+        "-e", "gsm_a.imeisv",
         "-E", "header=y",
         "-E", "separator=,",
         "-E", "quote=d"
@@ -239,6 +249,7 @@ def run_tshark_capture():
         err = proc.stderr.read().strip()
         if err:
             print(f"{RED}[TShark stderr]:{RESET}", err)
+
 
 def main():
     print_banner()
@@ -272,6 +283,7 @@ def main():
         pass
 
     print(f"{GREEN}All done. Stay safe out there!{RESET}\n")
+
 
 if __name__ == "__main__":
     main()

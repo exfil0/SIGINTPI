@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 """
-GSM Wizard (Headless) with All Fixes:
+GSM Wizard (Headless) - Hacker-Style UI
 
-1) Kills leftover processes that might occupy port 4729.
-2) Checks/install dependencies (python3, gr-gsm, tshark).
-3) Lets user pick SDR device (rtl, hackrf, bladerf).
-4) Runs grgsm_scanner, parses found ARFCNs.
-5) Prompts user which ARFCN/freq to use.
-6) Launches grgsm_livemon_headless (or fallback) in background on chosen freq.
-7) Runs TShark line-buffered to display IMSI, MCC, MNC, TMSI, SMS text.
-8) On exit (Ctrl+C from TShark), kills livemon.
+This script:
+ 1) Terminates leftover processes on port 4729
+ 2) Checks/install python3, gr-gsm, tshark
+ 3) Lets you pick SDR device
+ 4) Runs grgsm_scanner -> parse ARFCN/freq
+ 5) Let user pick channel
+ 6) Launch grgsm_livemon_headless (or fallback) in background
+ 7) Run TShark line-buffered in the foreground
+ 8) Kill livemon on exit
 
-If you see "Address already in use," this script tries to kill leftover processes.
-If you see "nothing shows," ensure your phone is forced to 2G and actually re-attaches or sends SMS.
+Hackerish look & feel with ASCII art and green text.
 
 Usage:
   sudo python3 exfil0IMSI.py
+
+If you see "Address already in use", port 4729 is locked.
+If no lines appear, phone might not be forced to 2G or is quickly re-assigning TMSI.
 """
 
 import subprocess
@@ -24,46 +27,42 @@ import re
 import os
 import time
 
+# Hacker-ish ANSI codes (green text on black style).
+RESET  = "\033[0m"
+BOLD   = "\033[1m"
+GREEN  = "\033[92m"
+RED    = "\033[91m"
+
+def print_banner():
+    """ Hacker-style ASCII banner. """
+    print(f"{BOLD}{GREEN}")
+    print("Evade the matrix. Sniff IMSI. Let's go...\n")
+
 def kill_leftover_processes():
     """
-    If something is bound to port 4729, we kill it.
-    That often happens if grgsm_livemon or grgsm_scanner
-    didn't terminate cleanly. We'll check using lsof or netstat
-    and attempt to kill automatically.
+    Kills leftover processes that bind to port 4729.
     """
-    print("=== Checking for leftover processes on port 4729 ===")
-    # netstat or lsof approach
+    print(f"{GREEN}>>> Checking for leftover processes on port 4729...{RESET}")
     check_cmd = ["lsof", "-i", ":4729"]
     result = subprocess.run(check_cmd, capture_output=True, text=True)
     lines = result.stdout.strip().split("\n")
 
-    # Example line might be:
-    # COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-    # python3  1234 root   4u  IPv4  ...
-    # We'll parse for the PID in the second column if lines > 1
     if len(lines) > 1 and "PID" not in lines[0]:
-        # We see at least one leftover process
         for line in lines[1:]:
             parts = line.split()
             if len(parts) >= 2:
                 pid = parts[1]
-                print(f"Killing leftover process PID={pid} that uses port 4729")
-                try:
-                    subprocess.run(["sudo", "kill", "-9", pid])
-                except:
-                    pass
+                print(f"{RED}Kill leftover process PID={pid} using port 4729!{RESET}")
+                subprocess.run(["sudo", "kill", "-9", pid], check=False)
+        print()
     else:
-        print("No leftover processes found or port 4729 is free.\n")
+        print("No leftover processes found.\n")
 
 def check_or_install_deps():
     """
-    Checks or installs:
-      - python3
-      - gr-gsm
-      - tshark
-    naive dpkg approach
+    Checks or installs python3, gr-gsm, tshark.
     """
-    print("=== Checking Dependencies ===")
+    print(f"{GREEN}>>> Checking Dependencies...{RESET}")
     packages = ["python3", "gr-gsm", "tshark"]
     missing = []
     for pkg in packages:
@@ -73,24 +72,24 @@ def check_or_install_deps():
             missing.append(pkg)
 
     if missing:
-        print(f"Missing packages: {missing}")
-        ans = input("Install them now via apt-get? [y/N]: ").strip().lower()
+        print(f"{RED}Missing packages:{RESET} {missing}")
+        ans = input(f"{BOLD}Install them now via apt-get? [y/N]: {RESET}").strip().lower()
         if ans == "y":
             subprocess.run(["sudo", "apt-get", "update"])
             install_cmd = ["sudo", "apt-get", "install", "-y"] + missing
             subprocess.run(install_cmd)
         else:
-            print("User declined installation. Exiting.")
+            print("User declined installation. Exiting.\n")
             sys.exit(1)
     else:
-        print("All required packages found or installed.\n")
+        print("All required packages found!\n")
 
 def pick_device():
     """
-    Choose from [RTL-SDR, HackRF, BladeRF].
-    Return device arg for gr-gsm commands: "rtl", "hackrf", "bladerf".
+    User picks device from [RTL-SDR, HackRF, BladeRF].
+    Returns dev arg: "rtl", "hackrf", "bladerf".
     """
-    print("=== Select SDR Device ===")
+    print(f"{GREEN}>>> Choose your weapon (SDR Device){RESET}")
     devices = [
         ("RTL-SDR",  "rtl"),
         ("HackRF",   "hackrf"),
@@ -99,30 +98,28 @@ def pick_device():
     for i, (name, dev) in enumerate(devices, start=1):
         print(f"{i}) {name}")
 
-    choice = input("Enter number [1-3]: ").strip()
+    choice = input("Pick device [1-3]: ").strip()
     try:
         idx = int(choice) - 1
         if idx < 0 or idx >= len(devices):
             raise ValueError()
     except ValueError:
-        print("Invalid choice. Exiting wizard.")
+        print("Invalid device choice. Exiting.\n")
         sys.exit(1)
 
     selected = devices[idx]
-    print(f"Selected: {selected[0]}\n")
+    print(f"{GREEN}Device chosen:{RESET} {selected[0]}\n")
     return selected[1]
 
 def scan_for_channels(device_arg):
     """
-    Run 'grgsm_scanner --args <device_arg>'.
-    Parse lines for ARFCN/freq. If 'Address already in use',
-    we exit or handle it. (We already killed leftover processes,
-    so hopefully it's free.)
+    Runs 'grgsm_scanner --args <device_arg>'.
+    Parse lines for ARFCN/freq. 
     """
-    print("=== Scanning GSM Band ===")
+    print(f"{GREEN}>>> Scanning GSM Band...{RESET}")
     cmd = ["grgsm_scanner", "--args", device_arg]
-    print("Command:", " ".join(cmd))
-    print("(Press Ctrl+C to stop scanning early, partial results may appear.)\n")
+    print(f"Command: {' '.join(cmd)}")
+    print("(Ctrl+C to abort scanning early)\n")
 
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     channels = []
@@ -136,68 +133,66 @@ def scan_for_channels(device_arg):
                 arfcn = match.group(1)
                 freq  = match.group(2)
                 channels.append((arfcn, freq))
-                print("Found:", line_s)
+                print(f"{GREEN}Found:{RESET} {line_s}")
     except KeyboardInterrupt:
-        print("Scan interrupted by user.\n")
+        print("Scan aborted by user.\n")
 
     process.wait()
     err = process.stderr.read().strip()
     if err:
-        print("[grgsm_scanner stderr]:", err)
-        # If we see "bind: Address already in use", user might have new leftover
+        print(f"{RED}[grgsm_scanner stderr]:{RESET}", err)
         if "Address already in use" in err:
-            print("Port 4729 is still in use or locked. Exiting.")
+            print("Port 4729 locked. Exiting.\n")
             sys.exit(1)
 
     return channels
 
 def pick_channel(channels):
     """
-    Let user pick a channel from discovered (arfcn, freq).
-    Returns (arfcn, freq).
+    Prompt user to pick from discovered ARFCN/freq.
     """
     if not channels:
-        print("\nNo channels found. Exiting wizard.")
+        print("No channels found. Exiting.\n")
         sys.exit(0)
 
-    print("\n=== Available Channels Discovered ===")
+    print(f"{GREEN}\n>>> ARFCNs discovered:{RESET}")
     for i, (arfcn, freq) in enumerate(channels, start=1):
         print(f"{i}) ARFCN={arfcn}, Frequency={freq}")
 
-    choice = input("Which channel? (Enter number): ").strip()
+    choice = input("Which channel? ").strip()
     try:
         idx = int(choice) - 1
         if idx < 0 or idx >= len(channels):
             raise ValueError()
     except ValueError:
-        print("Invalid selection. Exiting.")
+        print("Invalid channel selection. Exiting.\n")
         sys.exit(1)
 
     sel = channels[idx]
-    print(f"\nSelected ARFCN={sel[0]}, freq={sel[1]}")
+    print(f"{GREEN}Selected ARFCN={sel[0]}, freq={sel[1]}{RESET}\n")
     return sel
 
 def run_livemon_headless(device_arg, freq_str):
     """
-    Try 'grgsm_livemon_headless'. If not found, fallback to 'grgsm_livemon -p' or another no-gui flag.
-    freq_str e.g. "925.2M" -> convert "925.2e6".
+    Try 'grgsm_livemon_headless' or fallback to 'grgsm_livemon -p'.
+    freq_str "925.2M" -> "925.2e6".
     """
     freq_e = freq_str.replace("M", "e6").replace("G", "e9")
 
     cmd_name = "grgsm_livemon_headless"
     check_cmd = ["which", cmd_name]
     result = subprocess.run(check_cmd, capture_output=True, text=True)
+
     if result.returncode != 0:
-        print("Warning: grgsm_livemon_headless not found, falling back to grgsm_livemon -p.")
+        print(f"{RED}grgsm_livemon_headless not found!{RESET} Falling back to 'grgsm_livemon -p'.")
         cmd_name = "grgsm_livemon"
         fallback_flags = ["-p"]
         cmd = [cmd_name, "--args", device_arg, "-f", freq_e] + fallback_flags
     else:
         cmd = [cmd_name, "--args", device_arg, "-f", freq_e]
 
-    print("\n=== Starting grgsm_livemon (headless) in Background ===")
+    print(f"{GREEN}>>> Starting grgsm_livemon (headless) in bg...{RESET}")
     print("Command:", " ".join(cmd))
-
     proc = subprocess.Popen(
         cmd,
         stdout=subprocess.DEVNULL,
@@ -205,19 +200,19 @@ def run_livemon_headless(device_arg, freq_str):
         preexec_fn=os.setpgrp
     )
     time.sleep(2)
-    print("grgsm_livemon started (headless). If signal is weak, no data might appear.\n")
+    print("grgsm_livemon launched. If signal is poor, no data might appear.\n")
     return proc
 
 def run_tshark_capture():
     """
-    TShark line-buffered for frame.time, e212.imsi, e212.mcc, e212.mnc, gsm_a.tmsi, gsm_sms.sms_text
+    TShark line-buffered capturing IMSI, MCC, MNC, TMSI, SMS.
     """
-    print("=== Running TShark Capture ===\n")
+    print(f"{GREEN}>>> Launching TShark...{RESET}\n")
     cmd = [
         "tshark",
         "-i", "lo",
         "-f", "port 4729 and not icmp and udp",
-        "-l",  # line-buffered
+        "-l",
         "-Y", "(e212.imsi or e212.mcc or e212.mnc or gsm_a.tmsi or gsm_sms.sms_text)",
         "-T", "fields",
         "-e", "frame.time",
@@ -237,45 +232,46 @@ def run_tshark_capture():
             for line in proc.stdout:
                 print(line, end='')
         except KeyboardInterrupt:
-            print("\nInterrupted TShark.")
+            print(f"{RED}\nTShark interrupted by user.{RESET}")
             proc.terminate()
 
         proc.wait()
         err = proc.stderr.read().strip()
         if err:
-            print("[TShark stderr]:", err)
+            print(f"{RED}[TShark stderr]:{RESET}", err)
 
 def main():
-    print("=== GSM Wizard (Headless) ===\n")
+    print_banner()
 
-    # 1) Kill leftover processes on port 4729
+    # 1) Kill leftover processes
     kill_leftover_processes()
 
-    # 2) Check/install dependencies
+    # 2) Check dependencies
     check_or_install_deps()
 
-    # 3) Pick device
+    # 3) Choose device
     dev_arg = pick_device()
 
-    # 4) Scan channels
+    # 4) grgsm_scanner
     channels = scan_for_channels(dev_arg)
 
-    # 5) Pick channel
+    # 5) pick channel
     (arfcn, freq) = pick_channel(channels)
 
-    # 6) Launch livemon in background (headless)
+    # 6) launch livemon headless
     livemon_proc = run_livemon_headless(dev_arg, freq)
 
-    # 7) TShark in foreground
+    # 7) run TShark in foreground
     run_tshark_capture()
 
-    # 8) Stop livemon
-    print("\nStopping grgsm_livemon if still running.")
+    # 8) kill livemon
+    print(f"{RED}\nTerminating grgsm_livemon...{RESET}")
     try:
         livemon_proc.terminate()
     except:
         pass
-    print("Wizard done. Exiting.\n")
+
+    print(f"{GREEN}All done. Stay safe out there!{RESET}\n")
 
 if __name__ == "__main__":
     main()
